@@ -1,0 +1,11 @@
+{
+	"date_limit": 60,
+	"reply_num": 10,
+	"edit_num": 10,
+	"end_keys": [
+		"ctrl",
+		"t"
+	],
+	"random": true,
+	"persion": true
+}

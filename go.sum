@@ -18,6 +18,8 @@ github.com/go-vgo/robotgo v0.92.1 h1:56Ow9rrGqKXkGOe4Q0yNLk5PzCGu9qGopMtslTUIpgQ
 github.com/go-vgo/robotgo v0.92.1/go.mod h1:QkABAdWsrNgduWWYtDdmThbYNHhVP6Yvb4m2+h6cu3E=
 github.com/gotk3/gotk3 v0.5.0 h1:GOkq4cFgAfeK6YAukLi64bz8zPayZKeCSSRr4mcFReQ=
 github.com/gotk3/gotk3 v0.5.0/go.mod h1:/hqFpkNa9T3JgNAE2fLvCdov7c5bw//FHNZrZ3Uv9/Q=
+github.com/gotk3/gotk3 v0.5.1 h1:zIZM2K4gmkGz1idEFVUPTQfAK/pnWoLKrlIjLOc4kzo=
+github.com/gotk3/gotk3 v0.5.1/go.mod h1:/hqFpkNa9T3JgNAE2fLvCdov7c5bw//FHNZrZ3Uv9/Q=
 github.com/lxn/walk v0.0.0-20191128110447-55ccb3a9f5c1 h1:/QwQcwWVOQXcoNuV9tHx30gQ3q7jCE/rKcGjwzsa5tg=
 github.com/lxn/walk v0.0.0-20191128110447-55ccb3a9f5c1/go.mod h1:E23UucZGqpuUANJooIbHWCufXvOcT6E7Stq81gU+CSQ=
 github.com/lxn/win v0.0.0-20191128105842-2da648fda5b4 h1:5BmtGkQbch91lglMHQ9JIDGiYCL3kBRBA0ItZTvOcEI=

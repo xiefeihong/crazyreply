@@ -3,29 +3,23 @@ package view
 import (
 	"bufio"
 	"fmt"
-	"github.com/atotto/clipboard"
-	"github.com/go-vgo/robotgo"
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
-	"io"
-	"math/rand"
+	"github.com/xiefeihong/crazyreply/utils"
 	"os"
 	"strconv"
-	"time"
 )
 
-var texts = make([]*gtk.Entry, 0)
-var label string
-
 func ShowApp() {
-	StartSettings()
-	const appID = "org.gtk.example"
+	utils.StartSettings()
+	const appID = "top.xiefeihong.crazyreply"
 	application, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 	if err != nil {
 		fmt.Println("Could not create application.", err)
 	}
 	application.Connect("activate", func() {
 		builder, err := gtk.BuilderNewFromFile("view/ui/app.glade")
+
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -40,15 +34,15 @@ func ShowApp() {
 		buttonObj2, _ := builder.GetObject("button2")
 		button2 := buttonObj2.(*gtk.Button)
 		button2.Connect("clicked", func() {
-			label, _ = button2.GetLabel()
-			if label == "开始" {
-				label = "结束"
-				go carryReply(button2)
-			} else if label == "结束" {
-				label = "开始"
+			utils.Label, _ = button2.GetLabel()
+			if utils.Label == "开始" {
+				utils.Label = "结束"
+				go utils.CarryReply(button2)
+			} else if utils.Label == "结束" {
+				utils.Label = "开始"
 				fmt.Println("The end!")
 			}
-			button2.SetLabel(label)
+			button2.SetLabel(utils.Label)
 
 			file, err := os.OpenFile("message.txt", os.O_WRONLY | os.O_CREATE, 0666)
 			if err != nil {
@@ -56,65 +50,16 @@ func ShowApp() {
 				return
 			}
 			defer file.Close()
-			for i := 0; i<Settings.EditNum; i++ {
-				str, _ := texts[i].GetText()
+			for i := 0; i<utils.Settings.EditNum; i++ {
+				str, _ := utils.Texts[i].GetText()
 				file.WriteString(str + "\n")
 			}
 		})
 		application.AddWindow(win)
 		win.ShowAll()
 	})
-	go keyEvent(Settings.EndKeys)
+	go utils.KeyEvent(utils.Settings.EndKeys)
 	os.Exit(application.Run(os.Args))
-}
-
-func getMessages() []string {
-	messages := make([]string, Settings.EditNum)
-	for i:= 0; i<Settings.EditNum; i++ {
-		messages[i], _ = texts[i].GetText()
-	}
-	return messages
-}
-
-func carryReply(button *gtk.Button) {
-	messages := getMessages()
-	for i:= 0; i<Settings.EditNum; i++ {
-		texts[i].SetEditable(false)
-	}
-	if Settings.Random {
-		for i:= 0; label == "结束" &&  i < Settings.ReplyNum * Settings.EditNum; i++ {
-			reply(messages[rand.Intn(Settings.EditNum)])
-		}
-	} else {
-		for i:= 0 ;label == "结束" && i < Settings.ReplyNum; i++ {
-			for j:=0; j< Settings.EditNum; j++ {
-				reply(messages[j])
-			}
-		}
-	}
-	for i:= 0; i<Settings.EditNum; i++ {
-		texts[i].SetEditable(true)
-	}
-	label = "开始"
-	button.SetLabel(label)
-}
-
-func reply(message string){
-	startTime := time.Now().UnixNano()
-	var date int
-	if Settings.Persion {
-		date = rand.Intn(100) * Settings.DateLimit
-	} else {
-		date = Settings.DateLimit
-	}
-	clipboard.WriteAll(message)
-	time.Sleep(time.Duration(date) * time.Millisecond)
-	robotgo.KeyTap("v", "ctrl")
-	time.Sleep(time.Duration(date) * time.Millisecond)
-	robotgo.KeyTap("enter")
-	time.Sleep(time.Duration(date) * time.Millisecond)
-	endTime := time.Now().UnixNano()
-	fmt.Println("耗时：", (endTime - startTime)/1000000, "毫秒")
 }
 
 func setInputBox(builder *gtk.Builder){
@@ -129,7 +74,7 @@ func setInputBox(builder *gtk.Builder){
 	defer file.Close()
 	reader := bufio.NewReader(file)
 
-	for i := 0; i < Settings.EditNum; i++ {
+	for i := 0; i < utils.Settings.EditNum; i++ {
 		box, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 0)
 		label, _ := gtk.LabelNew(strconv.FormatInt(int64(i + 1), 10) + ": ")
 		label.SetWidthChars(3)
@@ -137,34 +82,16 @@ func setInputBox(builder *gtk.Builder){
 		entry.SetHExpand(true)
 		entry.SetWidthChars(50)
 
-		str, e2 := reader.ReadString('\n')
-		if e2 != io.EOF {
-			entry.SetText(str[:len(str)-1])
-		} else {
-			fmt.Println("", e2)
+		str, _ := reader.ReadString('\n')
+		l := len(str)
+		if l>0 {
+			entry.SetText(str[:l-1])
 		}
 		box.Add(label)
 		box.Add(entry)
 		bigBox.Add(box)
-		texts = append(texts, entry)
-		fmt.Println(texts)
+		utils.Texts = append(utils.Texts, entry)
+		fmt.Print(len(utils.Texts))
 	}
-}
-
-func keyEvent(keys []string){
-	l := len(keys)
-	var ok bool
-	if l == 2 {
-		ok = robotgo.AddEvents(keys[0], keys[1])
-	} else if l == 3 {
-		ok = robotgo.AddEvents(keys[0], keys[1], keys[2])
-	} else if l == 4 {
-		ok = robotgo.AddEvents(keys[0], keys[1], keys[2], keys[3])
-	} else {
-		fmt.Println("不支持的组合键")
-	}
-	if ok {
-		label = "开始"
-		fmt.Println("监测到按下了退出组合键")
-	}
+	fmt.Println()
 }

@@ -1,28 +1,16 @@
 package view
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/gotk3/gotk3/gtk"
-	"io"
+	"github.com/xiefeihong/crazyreply/utils"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 )
-
-var Settings Setting
-
-type Setting struct {
-	DateLimit int `json:"date_limit"`
-	ReplyNum int `json:"reply_num"`
-	EditNum int `json:"edit_num"`
-	EndKeys []string `json:"end_keys"`
-	Random bool `json:"random"`
-	Persion bool `json:"persion"`
-}
 
 func ShowSetting() {
 	builder, err := gtk.BuilderNewFromFile("view/ui/setting.glade")
@@ -69,8 +57,8 @@ func setSetting(entry1 *gtk.Entry, entry2 *gtk.Entry, entry3 *gtk.Entry, entry4 
 	endKeys := strings.Fields(text4)
 	random := checkButton1.GetActive()
 	printLog := checkButton2.GetActive()
-	Settings = Setting{dateLimit, replyNum, editNum, endKeys, random, printLog}
-	config, _ := json.Marshal(Settings)
+	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, endKeys, random, printLog}
+	config, _ := json.Marshal(utils.Settings)
 	file, err := os.OpenFile("config.json", os.O_WRONLY | os.O_TRUNC, 0666)
 	if err != nil {
 		log.Println(err)
@@ -83,32 +71,11 @@ func setSetting(entry1 *gtk.Entry, entry2 *gtk.Entry, entry3 *gtk.Entry, entry4 
 }
 
 func settingsToUI(entry1 *gtk.Entry, entry2 *gtk.Entry, entry3 *gtk.Entry, entry4 *gtk.Entry, checkButton1 *gtk.CheckButton, checkButton2 *gtk.CheckButton){
-	entry1.SetText(strconv.FormatInt(int64(Settings.DateLimit), 10))
-	entry2.SetText(strconv.FormatInt(int64(Settings.ReplyNum), 10))
-	entry3.SetText(strconv.FormatInt(int64(Settings.EditNum), 10))
-	entry4.SetText(strings.Join(Settings.EndKeys, "\t"))
-	checkButton1.SetActive(Settings.Random)
-	checkButton2.SetActive(Settings.Persion)
-	fmt.Println(Settings)
-}
-
-func StartSettings() {
-	file, e := os.Open("config.json")
-	if e != nil {
-		fmt.Println("打开文件失败：", e)
-		return
-	}
-	defer file.Close()
-	reader := bufio.NewReader(file)
-	buf := make([]byte, 1024)
-	for {
-		n, e2 := reader.Read(buf)
-		if e2 == io.EOF {
-			break
-		}
-		e3 := json.Unmarshal(buf[:n], &Settings)
-		if e3 != nil {
-			fmt.Println("json解析出错： ", e3)
-		}
-	}
+	entry1.SetText(strconv.FormatInt(int64(utils.Settings.DateLimit), 10))
+	entry2.SetText(strconv.FormatInt(int64(utils.Settings.ReplyNum), 10))
+	entry3.SetText(strconv.FormatInt(int64(utils.Settings.EditNum), 10))
+	entry4.SetText(strings.Join(utils.Settings.EndKeys, "\t"))
+	checkButton1.SetActive(utils.Settings.Random)
+	checkButton2.SetActive(utils.Settings.Persion)
+	fmt.Println(utils.Settings)
 }

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"example.com/crazyreply/view"
+	"github.com/xiefeihong/crazyreply/view"
 )
 
 func main() {

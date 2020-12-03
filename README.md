@@ -1,4 +1,4 @@
-# crazyreply
+# crazyreply [![GitHub release](https://img.shields.io/github/release/xiefeihong/crazyreply.svg)](https://github.com/xiefeihong/crazyreply/releases/latest)
 
 >一个疯狂发消息的应用
 
@@ -45,4 +45,23 @@ $ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc # This fix
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ go build  -ldflags="-H windowsgui"
+```
+
+#### Licences
+
+crazyreply is licenced under [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+```
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```

@@ -17,6 +17,7 @@ type Setting struct {
 	DateLimit int `json:"date_limit"`
 	ReplyNum int `json:"reply_num"`
 	EditNum int `json:"edit_num"`
+	Tags []string `json:"tags"`
 	EndKeys []string `json:"end_keys"`
 	Random bool `json:"random"`
 	Persion bool `json:"persion"`

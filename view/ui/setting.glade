@@ -5,168 +5,239 @@
   <object class="GtkWindow" id="window1">
     <property name="width-request">400</property>
     <property name="height-request">400</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes">设置</property>
-    <property name="resizable">0</property>
+    <property name="resizable">False</property>
     <property name="icon">icon.jpg</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">1</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">10</property>
         <child>
           <object class="GtkAspectFrame">
-            <property name="visible">1</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
             <property name="margin-start">10</property>
             <property name="margin-end">10</property>
             <property name="margin-top">10</property>
+            <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <property name="yalign">0</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">1</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
                         <property name="label">时间间隔: </property>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="setup1">
-                        <property name="visible">1</property>
-                        <property name="can-focus">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">1</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">1</property>
-                        <property name="label">最大次数: </property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="setup2">
-                        <property name="visible">1</property>
-                        <property name="can-focus">1</property>
-                      </object>
-                      <packing>
-                        <property name="expand">1</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label">最大次数: </property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="setup2">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
                         <property name="label">编辑条数: </property>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="setup3">
-                        <property name="visible">1</property>
-                        <property name="can-focus">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
                         <property name="label">标签分类: </property>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="setup4">
-                        <property name="visible">1</property>
-                        <property name="can-focus">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="visible">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
                         <property name="label">快捷终止: </property>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="setup5">
-                        <property name="visible">1</property>
-                        <property name="can-focus">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">1</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkAspectFrame">
-                        <property name="visible">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">1</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
                                 <property name="label">是否随机: </property>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="setup6">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                                <property name="draw-indicator">1</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="draw-indicator">True</property>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -174,29 +245,43 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkAspectFrame">
-                        <property name="visible">1</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="visible">1</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="visible">1</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
                                 <property name="label">模拟真人: </property>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="setup7">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                                <property name="draw-indicator">1</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="draw-indicator">True</property>
                               </object>
                               <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -204,12 +289,15 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -217,22 +305,30 @@
             </child>
           </object>
           <packing>
-            <property name="expand">1</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkAspectFrame">
-            <property name="visible">1</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
             <property name="margin-bottom">10</property>
+            <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
               <object class="GtkButton" id="button">
                 <property name="label" translatable="yes">保存</property>
-                <property name="visible">1</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
               </object>
             </child>
           </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="pack-type">end</property>
             <property name="position">1</property>
           </packing>

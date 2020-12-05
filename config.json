@@ -2,26 +2,14 @@
 	"date_limit": 50,
 	"reply_num": 10,
 	"edit_num": 10,
-	"tags": {
-		"朋友": [
-			"1",
-			"2",
-			"3",
-			"4",
-			"5"
-		],
-		"爱人": [
-			"1",
-			"2",
-			"3",
-			"4",
-			"5"
-		]
-	},
+	"tags": [
+		"爱人",
+		"朋友"
+	],
 	"end_keys": [
 		"ctrl",
 		"t"
 	],
 	"random": true,
-	"persion": false
+	"persion": true
 }

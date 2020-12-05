@@ -1,8 +1,8 @@
 package view
 
 import (
+	"bufio"
 	"fmt"
-	"github.com/go-vgo/robotgo"
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/xiefeihong/crazyreply/utils"
@@ -22,14 +22,7 @@ func ShowApp() {
 		win.SetSizeRequest(450, 450)
 		win.SetTitle("疯狂回复")
 		book, _ := gtk.NotebookNew()
-		for lab, msgs := range utils.Settings.Tags {
-			bookPage := createBookPage(msgs)
-			bottonAspectFrame := createBottonAspectFrame(lab)
-			bookPage.Add(bottonAspectFrame)
-			book.Add(bookPage)
-			label, _ := gtk.LabelNew(lab)
-			book.SetTabLabel(bookPage, label)
-		}
+		setTags(book)
 		win.Add(book)
 		application.AddWindow(win)
 		win.ShowAll()
@@ -37,54 +30,63 @@ func ShowApp() {
 	go utils.KeyEvent(utils.Settings.EndKeys)
 	os.Exit(application.Run(os.Args))
 }
-
-func createBookPage(msgs []string) *gtk.Box {
-	topBox, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
-	hdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
-	vdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
+func setTags(book *gtk.Notebook){
+	bigBox, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
+	hdjustment, _ := gtk.AdjustmentNew(100, -1, -1, -1, -1, -1)
+	vdjustment, _ := gtk.AdjustmentNew(100, -1, -1, -1, -1, -1)
 	scrolledWindow, _ := gtk.ScrolledWindowNew(hdjustment, vdjustment)
 	scrolledWindow.SetVExpand(true)
 	viewport, _ := gtk.ViewportNew(hdjustment, vdjustment)
 	aspectFrame, _ := gtk.AspectFrameNew("", 0.5, 0, 1, true)
 	aspectFrame.SetShadowType(gtk.SHADOW_NONE)
-	textsBox, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
+	box, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
+	bigBox.Add(scrolledWindow)
 	scrolledWindow.Add(viewport)
 	scrolledWindow.SetMarginTop(10)
 	scrolledWindow.SetMarginStart(10)
 	scrolledWindow.SetMarginEnd(10)
 	viewport.Add(aspectFrame)
-	aspectFrame.Add(textsBox)
-	for i := 0; i < utils.Settings.EditNum; i++ {
-		label := strconv.FormatInt(int64(i + 1), 10) + ": "
-		var msg string
-		if i < len(msgs) {
-			msg = msgs[i]
-		} else {
-			msg = ""
-		}
-		textBox := createInputBox(label, msg)
-		textsBox.Add(textBox)
+	aspectFrame.Add(box)
+	setInputBox(box)
+	bigBox.Add(createBottonAspectFrame())
+	book.Add(bigBox)
+	label, _ := gtk.LabelNew("label1")
+	label.SetProperty("tab-fill", false)
+	book.SetTabLabel(bigBox, label)
+}
+
+func setInputBox(bigBox *gtk.Box){
+	file, e := os.Open("message.txt")
+	if e != nil {
+		fmt.Printf("打开文件失败：%v\n", e)
+		return
 	}
-	topBox.Add(scrolledWindow)
-	return topBox
+	defer file.Close()
+	reader := bufio.NewReader(file)
+
+	for i := 0; i < utils.Settings.EditNum; i++ {
+		box, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 0)
+		label, _ := gtk.LabelNew(strconv.FormatInt(int64(i + 1), 10) + ": ")
+		label.SetWidthChars(3)
+		entry, _ := gtk.EntryNew()
+		entry.SetHExpand(true)
+		entry.SetWidthChars(50)
+
+		str, _ := reader.ReadString('\n')
+		l := len(str)
+		if l>0 {
+			entry.SetText(str[:l-1])
+		}
+		box.Add(label)
+		box.Add(entry)
+		bigBox.Add(box)
+		utils.Texts = append(utils.Texts, entry)
+		fmt.Print(len(utils.Texts))
+	}
+	fmt.Println()
 }
 
-func createInputBox(lab string, messages string) *gtk.Box {
-	lineBox, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 0)
-	label, _ := gtk.LabelNew(lab)
-	label.SetWidthChars(3)
-	entry, _ := gtk.EntryNew()
-	entry.SetHExpand(true)
-	entry.SetWidthChars(50)
-	entry.SetText(messages)
-	lineBox.Add(label)
-	lineBox.Add(entry)
-	utils.Texts = append(utils.Texts, entry)
-	fmt.Print(len(utils.Texts))
-	return lineBox
-}
-
-func createBottonAspectFrame(label string) *gtk.AspectFrame {
+func createBottonAspectFrame() *gtk.AspectFrame {
 	bottonAspectFrame, _ := gtk.AspectFrameNew("", 0.5, 0.5, 1, true)
 	bottonAspectFrame.SetShadowType(gtk.SHADOW_NONE)
 	bottonAspectFrame.SetMarginBottom(10)
@@ -93,36 +95,30 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 	button1.SetLabel("设置")
 	button2, _ := gtk.ButtonNew()
 	button2.SetLabel("开始")
-	utils.BottonLabel = "开始"
 	button1.Connect("clicked", func() {
-		if utils.BottonLabel == "开始" {
-			ShowSetting()
-		}
+		ShowSetting()
 	})
 	button2.Connect("clicked", func() {
-		utils.BottonLabel, _ = button2.GetLabel()
-		if utils.BottonLabel == "开始" {
-			utils.BottonLabel = "结束"
+		utils.Label, _ = button2.GetLabel()
+		if utils.Label == "开始" {
+			utils.Label = "结束"
 			go utils.CarryReply(button2)
-		} else if utils.BottonLabel == "结束" {
-			utils.BottonLabel = "开始"
+		} else if utils.Label == "结束" {
+			utils.Label = "开始"
 			fmt.Println("The end!")
 		}
-		button2.SetLabel(utils.BottonLabel)
-		robotgo.KeyTap("tab")
-		tag := utils.Settings.Tags[label]
+		button2.SetLabel(utils.Label)
+
+		file, err := os.OpenFile("message.txt", os.O_WRONLY | os.O_CREATE, 0666)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer file.Close()
 		for i := 0; i<utils.Settings.EditNum; i++ {
 			str, _ := utils.Texts[i].GetText()
-			if str != "" {
-				if i < len(tag){
-					tag[i] = str
-				} else {
-					tag = append(tag, str)
-				}
-			}
+			file.WriteString(str + "\n")
 		}
-		utils.Settings.Tags[label] = tag
-		utils.SettingToFile()
 	})
 	bottonAspectFrame.Add(bottomBox)
 	bottomBox.Add(button1)

@@ -1,13 +1,9 @@
 package view
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/xiefeihong/crazyreply/utils"
-	"log"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -52,28 +48,30 @@ func setSetting(entry1 *gtk.Entry, entry2 *gtk.Entry, entry3 *gtk.Entry, entry4 
 	dateLimit, _ := strconv.Atoi(text1)
 	replyNum, _ := strconv.Atoi(text2)
 	editNum, _ := strconv.Atoi(text3)
-	tags := strings.Split(text4, ",")
+	tagLabs := strings.Split(text4, ",")
 	endKeys := strings.Fields(text5)
 	random := checkButton1.GetActive()
 	printLog := checkButton2.GetActive()
-	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, endKeys, random, printLog}
-	config, _ := json.Marshal(utils.Settings)
-	file, err := os.OpenFile("config.json", os.O_WRONLY | os.O_TRUNC, 0666)
-	if err != nil {
-		log.Println(err)
-		return
+	tags := make(map[string][]string, 0)
+	for _, value := range tagLabs {
+		messages := utils.Settings.Tags[value]
+		tags[value] = messages
 	}
-	defer file.Close()
-	var str bytes.Buffer
-	json.Indent(&str, config,"", "\t")
-	file.Write(str.Bytes())
+	fmt.Println()
+	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, endKeys, random, printLog}
+	utils.SettingToFile()
 }
 
 func settingsToUI(entry1 *gtk.Entry, entry2 *gtk.Entry, entry3 *gtk.Entry, entry4 *gtk.Entry, entry5 *gtk.Entry, checkButton1 *gtk.CheckButton, checkButton2 *gtk.CheckButton){
 	entry1.SetText(strconv.FormatInt(int64(utils.Settings.DateLimit), 10))
 	entry2.SetText(strconv.FormatInt(int64(utils.Settings.ReplyNum), 10))
 	entry3.SetText(strconv.FormatInt(int64(utils.Settings.EditNum), 10))
-	entry4.SetText(strings.Join(utils.Settings.Tags, ","))
+	tags := make([]string, len(utils.Settings.Tags))
+	for label, _ := range utils.Settings.Tags {
+		tags = append(tags, label)
+		fmt.Print(len(tags))
+	}
+	entry4.SetText(strings.Join(tags, ","))
 	entry5.SetText(strings.Join(utils.Settings.EndKeys, "\t"))
 	checkButton1.SetActive(utils.Settings.Random)
 	checkButton2.SetActive(utils.Settings.Persion)

@@ -8,6 +8,7 @@ import (
 	"github.com/go-vgo/robotgo"
 	"github.com/go-vgo/robotgo/clipboard"
 	"github.com/gotk3/gotk3/gtk"
+	hook "github.com/robotn/gohook"
 	"io"
 	"math/rand"
 	"os"
@@ -30,27 +31,31 @@ var BottonLabel string
 var Settings Setting
 
 func CarryReply(button *gtk.Button) {
-	messages := Settings.Tags[PageLabel]
-	msgLen := len(messages)
-	for _, msg := range Texts[PageLabel] {
-		msg.SetEditable(false)
-	}
+	msgs := Settings.Tags[PageLabel]
+	msgLen := len(msgs)
+	setText(Texts, false)
 	if Settings.Random {
 		for i:= 0; BottonLabel == "结束" &&  i < Settings.ReplyNum * msgLen; i++ {
-			reply(messages[rand.Intn(msgLen)])
+			reply(msgs[rand.Intn(msgLen)])
 		}
 	} else {
 		for i:= 0 ; BottonLabel == "结束" && i < Settings.ReplyNum; i++ {
 			for j:=0; j< msgLen; j++ {
-				reply(messages[j])
+				reply(msgs[j])
 			}
 		}
 	}
-	for _, msg := range Texts[PageLabel] {
-		msg.SetEditable(true)
-	}
+	setText(Texts, true)
 	BottonLabel = "开始"
 	button.SetLabel(BottonLabel)
+}
+
+func setText(texts map[string][]*gtk.Entry, disable bool) {
+	for _, msgs := range texts {
+		for _, entry := range msgs {
+			entry.SetEditable(disable)
+		}
+	}
 }
 
 func reply(message string){
@@ -71,19 +76,13 @@ func reply(message string){
 }
 
 func KeyEvent(keys []string){
-	l := len(keys)
-	var ok bool
-	if l == 2 {
-		ok = robotgo.AddEvents(keys[0], keys[1])
-	} else if l == 3 {
-		ok = robotgo.AddEvents(keys[0], keys[1], keys[2])
-	} else {
-		fmt.Println("不支持的组合键")
-	}
-	if ok {
+	fmt.Println("--- Please press", keys, "---")
+	hook.Register(hook.KeyDown, keys, func(e hook.Event) {
 		BottonLabel = "开始"
-		fmt.Println("监测到按下了退出组合键")
-	}
+		fmt.Println(keys)
+	})
+	s := hook.Start()
+	<-hook.Process(s)
 }
 
 func StartSettings() {

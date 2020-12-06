@@ -20,6 +20,7 @@ func ShowApp() {
 	}
 	application.Connect("activate", func() {
 		win, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
+		win.SetIconFromFile("view/ui/icon.jpg")
 		win.SetSizeRequest(450, 450)
 		win.SetTitle("疯狂回复")
 		book, _ = gtk.NotebookNew()
@@ -104,23 +105,23 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 		utils.PageLabel = label
 		utils.BottonLabel, _ = button2.GetLabel()
 		if utils.BottonLabel == "开始" {
-			tag := utils.Settings.Tags[label]
+			msgs := utils.Settings.Tags[label]
 			var validNum = 0
-			for i := 0; i<utils.Settings.EditNum; i++ {
+			for i := 0; i < utils.Settings.EditNum; i++ {
 				str, _ := utils.Texts[label][i].GetText()
 				if str != "" {
-					if i < len(tag){
-						tag[i] = str
+					if i < len(msgs) {
+						msgs[i] = str
 					} else {
-						tag = append(tag, str)
+						msgs = append(msgs, str)
 					}
 					validNum ++
 				}
 			}
-			if validNum < len(tag) {
-				tag = tag[:validNum]
+			if validNum < len(msgs) {
+				msgs = msgs[:validNum]
 			}
-			utils.Settings.Tags[label] = tag
+			utils.Settings.Tags[label] = msgs
 			utils.SettingToFile()
 			utils.BottonLabel = "结束"
 			go utils.CarryReply(button2)

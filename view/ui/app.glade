@@ -6,6 +6,7 @@
     <property name="width-request">450</property>
     <property name="height-request">450</property>
     <property name="title" translatable="yes">疯狂回复</property>
+    <property name="icon">icon.jpg</property>
     <child>
       <object class="GtkNotebook" id="notebook">
         <property name="visible">1</property>

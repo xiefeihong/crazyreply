@@ -24,6 +24,7 @@
 ### 注意事项
 ```
 此项目在运行的时候可能会因为把焦点错误指定到某个app的窗口，导致消息发送给了错误的人，所以在使用本工具之前应该谨慎关闭桌面多余的窗口。
+如果使用的linux版本的程序，要确保xclip，xsel两个命令中的一个可以正常使用。
 如果使用此工具进行特殊的用途或者造成了误会和损失本人概不负责。
 ```
 
@@ -35,7 +36,7 @@ git
 
 #### Fedora构建:
 ```
-xclip xsel要保证其中一个可以正常调用
+确保xclip，xsel两个命令中的一个可以正常使用
 $ dnf install gtk3-devel gdk-pixbuf2-devel glib2-devel \
     libxkbcommon-x11-devel xorg-x11-xkb-utils-devel libxkbfile-devel
 $ git clone https://github.com/xiefeihong/crazyreply.git

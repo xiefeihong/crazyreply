@@ -75,10 +75,12 @@ func reply(message string){
 	} else {
 		date = rand.Intn(100) * Settings.DateLimit
 	}
-	clipboard.WriteAll(message + "\n")
+	clipboard.WriteAll(message)
 	t := time.Duration(date)
 	time.Sleep(t * time.Millisecond)
 	robotgo.KeyTap("v", "ctrl")
+	time.Sleep(t * time.Millisecond)
+	robotgo.KeyTap("enter")
 	time.Sleep(t * time.Millisecond)
 	fmt.Print(".")
 }

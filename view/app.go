@@ -1,11 +1,13 @@
 package view
 
 import (
+	"github.com/go-vgo/robotgo"
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/xiefeihong/crazyreply/utils"
 	"os"
 	"strconv"
+	"time"
 )
 
 var book *gtk.Notebook
@@ -103,7 +105,6 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 		utils.PageLabel = label
 		utils.BottonLabel, _ = startBtn.GetLabel()
 		if utils.BottonLabel == "开始" {
-			go utils.KeyDownEvent(utils.Settings.EndKeys)
 			msgs := utils.Settings.Tags[label]
 			var validNum = 0
 			for i := 0; i < utils.Settings.EditNum; i++ {
@@ -123,7 +124,10 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 			utils.Settings.Tags[label] = msgs
 			utils.SettingToFile()
 			utils.BottonLabel = "结束"
+			robotgo.KeyTap("tab")
+			time.Sleep(50 * time.Millisecond)
 			go utils.CarryReply(startBtn)
+			go utils.KeyDownEvent(utils.Settings.EndKeys)
 		} else if utils.BottonLabel == "结束" {
 			utils.BottonLabel = "开始"
 		}

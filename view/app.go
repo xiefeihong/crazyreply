@@ -1,7 +1,6 @@
 package view
 
 import (
-	"github.com/go-vgo/robotgo"
 	"github.com/gotk3/gotk3/glib"
 	"github.com/gotk3/gotk3/gtk"
 	"github.com/xiefeihong/crazyreply/utils"
@@ -24,18 +23,19 @@ func ShowApp() {
 		win.SetSizeRequest(450, 450)
 		win.SetTitle("疯狂回复")
 		book, _ = gtk.NotebookNew()
-		for lab, msgs := range utils.Settings.Tags {
+		//for lab, msgs := range utils.Settings.Tags {
+		utils.SortedMap(utils.Settings.Tags, func(lab string, v interface{}) {
+			msgs := v.([]string)
 			bookPage := createBookPage(lab, msgs)
 			bottonAspectFrame := createBottonAspectFrame(lab)
 			bookPage.Add(bottonAspectFrame)
 			label, _ := gtk.LabelNew(lab)
 			book.AppendPage(bookPage, label)
-		}
+		})
 		win.Add(book)
 		application.AddWindow(win)
 		win.ShowAll()
 	})
-	go utils.KeyEvent(utils.Settings.EndKeys)
 	os.Exit(application.Run(os.Args))
 }
 
@@ -55,7 +55,6 @@ func createBookPage(pageLabel string, msgs []string) *gtk.Box {
 	scrolledWindow.SetMarginEnd(10)
 	viewport.Add(aspectFrame)
 	aspectFrame.Add(textsBox)
-	entrys := make([]*gtk.Entry, 0)
 	for i := 0; i < utils.Settings.EditNum; i++ {
 		inputLabel := strconv.FormatInt(int64(i + 1), 10) + ": "
 		var msg string
@@ -64,11 +63,10 @@ func createBookPage(pageLabel string, msgs []string) *gtk.Box {
 		} else {
 			msg = ""
 		}
-		textBox, enrty := createInputBox(inputLabel, msg)
+		textBox, textEnrty := createInputBox(inputLabel, msg)
 		textsBox.Add(textBox)
-		entrys = append(entrys, enrty)
+		utils.Texts[pageLabel] = append(utils.Texts[pageLabel], textEnrty)
 	}
-	utils.Texts[pageLabel] = entrys
 	topBox.Add(scrolledWindow)
 	return topBox
 }
@@ -77,13 +75,13 @@ func createInputBox(inputLabel string, messages string) (*gtk.Box, *gtk.Entry) {
 	lineBox, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 0)
 	label, _ := gtk.LabelNew(inputLabel)
 	label.SetWidthChars(3)
-	entry, _ := gtk.EntryNew()
-	entry.SetHExpand(true)
-	entry.SetWidthChars(50)
-	entry.SetText(messages)
+	inputEntry, _ := gtk.EntryNew()
+	inputEntry.SetHExpand(true)
+	inputEntry.SetWidthChars(50)
+	inputEntry.SetText(messages)
 	lineBox.Add(label)
-	lineBox.Add(entry)
-	return lineBox, entry
+	lineBox.Add(inputEntry)
+	return lineBox, inputEntry
 }
 
 func createBottonAspectFrame(label string) *gtk.AspectFrame {
@@ -91,20 +89,21 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 	bottonAspectFrame.SetShadowType(gtk.SHADOW_NONE)
 	bottonAspectFrame.SetMarginBottom(10)
 	bottomBox, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 10)
-	button1, _ := gtk.ButtonNew()
-	button1.SetLabel("设置")
-	button2, _ := gtk.ButtonNew()
-	button2.SetLabel("开始")
+	settingBtn, _ := gtk.ButtonNew()
+	settingBtn.SetLabel("设置")
+	startBtn, _ := gtk.ButtonNew()
+	startBtn.SetLabel("开始")
 	utils.BottonLabel = "开始"
-	button1.Connect("clicked", func() {
+	settingBtn.Connect("clicked", func() {
 		if utils.BottonLabel == "开始" {
 			ShowSetting()
 		}
 	})
-	button2.Connect("clicked", func() {
+	startBtn.Connect("clicked", func() {
 		utils.PageLabel = label
-		utils.BottonLabel, _ = button2.GetLabel()
+		utils.BottonLabel, _ = startBtn.GetLabel()
 		if utils.BottonLabel == "开始" {
+			go utils.KeyDownEvent(utils.Settings.EndKeys)
 			msgs := utils.Settings.Tags[label]
 			var validNum = 0
 			for i := 0; i < utils.Settings.EditNum; i++ {
@@ -124,15 +123,14 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 			utils.Settings.Tags[label] = msgs
 			utils.SettingToFile()
 			utils.BottonLabel = "结束"
-			go utils.CarryReply(button2)
-			robotgo.KeyTap("tab")
+			go utils.CarryReply(startBtn)
 		} else if utils.BottonLabel == "结束" {
 			utils.BottonLabel = "开始"
 		}
-		button2.SetLabel(utils.BottonLabel)
+		startBtn.SetLabel(utils.BottonLabel)
 	})
 	bottonAspectFrame.Add(bottomBox)
-	bottomBox.Add(button1)
-	bottomBox.Add(button2)
+	bottomBox.Add(settingBtn)
+	bottomBox.Add(startBtn)
 	return bottonAspectFrame
 }

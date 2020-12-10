@@ -6,8 +6,15 @@
 ```
 此项目是将预设好的消息通过粘贴到文本框并控制键盘的方式实现的循环发消息。
 此程序依赖robotgo，gotk3；目前确定支持Windows和Linux，MacOS理论上也支持。
-
 ```
+
+#### 软件截图:
+![Fedora系统下的效果](https://img-blog.csdnimg.cn/20201210215055933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Fedora系统下的效果](https://img-blog.csdnimg.cn/20201210215055269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+
+![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20201210215122367.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20201210215122152.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+
 
 #### 使用方法:
 ```

@@ -13,7 +13,6 @@ import (
 var book *gtk.Notebook
 
 func ShowApp() {
-	utils.StartSettings()
 	const appID = "top.xiefeihong.crazyreply"
 	application, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
 	if err != nil {
@@ -21,7 +20,7 @@ func ShowApp() {
 	}
 	application.Connect("activate", func() {
 		win, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
-		win.SetIconFromFile("view/ui/icon.jpg")
+		win.SetIconFromFile(utils.Root + "/view/ui/icon.ico")
 		win.SetSizeRequest(450, 450)
 		win.SetTitle("疯狂回复")
 		book, _ = gtk.NotebookNew()

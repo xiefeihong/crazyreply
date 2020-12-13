@@ -24,6 +24,7 @@ type Setting struct {
 }
 
 var (
+	Root string
 	Texts = make(map[string][]*gtk.Entry, 0)
 	PageLabel string
 	BottonLabel string
@@ -101,7 +102,7 @@ func StartSettings() {
 			Settings = Setting{50, 10, 10, tags, []string{"control", "t"}, true, false, false}
 		}
 	}()
-	out := ReadBytesToFile("config.json")
+	out := ReadBytesToFile(Root + "/config.json")
 	e := json.Unmarshal(out, &Settings)
 	if e != nil {
 		panic(e)
@@ -117,5 +118,5 @@ func SettingToFile(){
 	config, _ := json.Marshal(Settings)
 	var str bytes.Buffer
 	json.Indent(&str, config,"", "\t")
-	WriteStringToFile("config.json", str.String())
+	WriteStringToFile(Root + "/config.json", str.String())
 }

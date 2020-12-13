@@ -14,7 +14,7 @@ var vsUp []uint16
 var end bool
 
 func ShowSetting() {
-	builder, err := gtk.BuilderNewFromFile("view/ui/setting.glade")
+	builder, err := gtk.BuilderNewFromFile(utils.Root + "/view/ui/setting.glade")
 	if err != nil {
 		panic(err)
 	}

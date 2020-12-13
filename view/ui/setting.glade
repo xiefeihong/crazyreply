@@ -22,7 +22,7 @@
   <object class="GtkWindow" id="win">
     <property name="title" translatable="yes">设置</property>
     <property name="resizable">0</property>
-    <property name="icon">icon.jpg</property>
+    <property name="icon">icon.ico</property>
     <child>
       <object class="GtkBox">
         <property name="visible">1</property>

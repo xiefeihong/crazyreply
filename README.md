@@ -19,18 +19,18 @@
 #### 使用方法:
 ```
 输入预先填好的文字信息，点击开始，然后把焦点放到对应的文本框里就可以发消息了。
+文本框可以是任何可以输入文字的地方，比如弹幕的文本框，聊天软件文本框等。
 ```
 
 ### 注意事项
 ```
-此项目在运行的时候可能会因为把焦点错误指定到某个app的窗口，导致消息发送给了错误的人，所以在使用本工具之前应该谨慎关闭桌面多余的窗口。
+此项目在运行的时候可能会因为把焦点错误指定到某app的窗口，导致消息发送给了错误的人，所以在使用本工具之前应该谨慎，尽量关闭桌面多余的窗口。
 如果使用的linux版本的程序，要确保xclip，xsel两个命令中的一个可以正常使用。
-如果使用此工具进行特殊的用途或者造成了误会和损失本人概不负责。
 ```
 
 ### 建需要的软件:
 ```
-golang
+golang 1.15.2
 git
 ```
 
@@ -52,6 +52,8 @@ $ source ~/.bashrc
 $ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc # This fixes a bug in pkgconfig
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
+$ 创建文件crazyreply.rc；内容：IDI_ICON1 ICON "view/ui/icon.ico"
+$ windres -o crazyreply.syso crazyreply.rc
 $ go build  -ldflags="-H windowsgui"
 ```
 

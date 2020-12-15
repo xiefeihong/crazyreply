@@ -50,10 +50,12 @@ func ShowSetting() {
 		win.Close()
 	})
 	preserveBtn.Connect("clicked", func() {
-		setSetting(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, labelEntrys, endKeysEntry, randomSwitch, withoutStopSwitch, persionSwitch)
-		dialog := gtk.MessageDialogNew(win, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, "%s", "建议重新打开此程序")
-		dialog.Run()
-		dialog.Destroy()
+		restart := setSetting(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, labelEntrys, endKeysEntry, randomSwitch, withoutStopSwitch, persionSwitch)
+		if restart {
+			dialog := gtk.MessageDialogNew(win, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, "%s", "请重新打开此程序")
+			dialog.Run()
+			dialog.Destroy()
+		}
 		win.Close()
 	})
 	buttonIncrease.Connect("clicked", func() {
@@ -122,7 +124,7 @@ func KeyUpEvent(win *gtk.Window, endKeysEntry *gtk.Entry) {
 }
 
 func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabEntrys []*gtk.Entry,
-		endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, withoutStopSwitch *gtk.Switch, persionSwitch *gtk.Switch){
+		endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, withoutStopSwitch *gtk.Switch, persionSwitch *gtk.Switch) bool {
 	dateLimitStr, _ := dateLimitSpinBtn.GetText()
 	replyNumStr, _ := replyNumSpinBtn.GetText()
 	editNumStr, _ := editNumSpinBtn.GetText()
@@ -134,15 +136,33 @@ func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButto
 	random := randomSwitch.GetActive()
 	withoutStop := withoutStopSwitch.GetActive()
 	persion := persionSwitch.GetActive()
+	restart := false
+	if editNum != utils.Settings.EditNum {
+		restart = true
+	}
+	tagLen := len(utils.Settings.Tags)
+	if tagLen != len(textLabEntrys) {
+		restart = true
+	}
 	tags := make([]utils.Tag, 0)
 	for pageIndex, textEntry := range textLabEntrys {
 		text, _ := textEntry.GetText()
 		if text != "" {
-			tags = append(tags, utils.Tag{text, utils.Settings.Tags[pageIndex].Msgs})
+			var msgs []string
+			if pageIndex + 1 < tagLen {
+				msgs = utils.Settings.Tags[pageIndex].Msgs
+				if  utils.Settings.Tags[pageIndex].Label != text {
+					restart = true
+				}
+			} else {
+				msgs = make([]string, 0)
+			}
+			tags = append(tags, utils.Tag{text, msgs})
 		}
 	}
 	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, endKeys, random, withoutStop, persion}
 	utils.SettingToFile()
+	return restart
 }
 
 func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabsBox *gtk.Box,

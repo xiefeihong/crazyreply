@@ -8,10 +8,12 @@ import (
 	"strings"
 )
 
-var labelEntrys []*gtk.Entry
-var vsDown []uint16
-var vsUp []uint16
-var end bool
+var (
+	labelEntrys []*gtk.Entry
+	vsDown []uint16
+	vsUp []uint16
+	end bool
+)
 
 func ShowSetting() {
 	builder, err := gtk.BuilderNewFromFile(utils.Root + "/view/ui/setting.glade")
@@ -132,13 +134,11 @@ func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButto
 	random := randomSwitch.GetActive()
 	withoutStop := withoutStopSwitch.GetActive()
 	persion := persionSwitch.GetActive()
-	var tagLabs = make([]string, 0)
-	tags := make(map[string][]string, 0)
-	for _, textEntry := range textLabEntrys {
+	tags := make([]utils.Tag, 0)
+	for pageIndex, textEntry := range textLabEntrys {
 		text, _ := textEntry.GetText()
 		if text != "" {
-			tagLabs = append(tagLabs, text)
-			tags[text] = utils.Settings.Tags[text]
+			tags = append(tags, utils.Tag{text, utils.Settings.Tags[pageIndex].Msgs})
 		}
 	}
 	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, endKeys, random, withoutStop, persion}
@@ -151,13 +151,12 @@ func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinBut
 	replyNumSpinBtn.SetValue(float64(utils.Settings.ReplyNum))
 	editNumSpinBtn.SetValue(float64(utils.Settings.EditNum))
 	labelEntrys = make([]*gtk.Entry, 0)
-	//for label, _ := range utils.Settings.Tags {
-	utils.SortedMap(utils.Settings.Tags, func(label string, v interface{}) {
+	for _, tag := range utils.Settings.Tags {
 		textLabEntry, _ := gtk.EntryNew()
-		textLabEntry.SetText(label)
+		textLabEntry.SetText(tag.Label)
 		textLabsBox.Add(textLabEntry)
 		labelEntrys = append(labelEntrys, textLabEntry)
-	})
+	}
 	endKeysEntry.SetText(strings.Join(utils.Settings.EndKeys, "\t"))
 	randomSwitch.SetActive(utils.Settings.Random)
 	withoutStopSwitch.SetActive(utils.Settings.WithoutStop)

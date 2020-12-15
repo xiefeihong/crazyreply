@@ -5,19 +5,7 @@ import (
 	"bytes"
 	"io"
 	"os"
-	"sort"
 )
-
-func SortedMap(m map[string][]string, f func(k string, v interface{})) {
-	var keys []string
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	for _, k := range keys {
-		f(k, m[k])
-	}
-}
 
 func Reverse(list []string){
 	var temp string

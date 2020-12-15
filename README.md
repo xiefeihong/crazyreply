@@ -1,5 +1,4 @@
 # crazyreply [![GitHub release](https://img.shields.io/github/release/xiefeihong/crazyreply.svg)](https://github.com/xiefeihong/crazyreply/releases/latest)
-
 >一个疯狂发消息的应用
 
 ### 应用说明
@@ -8,13 +7,23 @@
 此程序依赖robotgo，gotk3；目前确定支持Windows和Linux，MacOS理论上也支持。
 ```
 
-#### 软件截图:
-![Fedora系统下的效果](https://img-blog.csdnimg.cn/20201210215055933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
-![Fedora系统下的效果](https://img-blog.csdnimg.cn/20201210215055269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+#### 使用场景：
+```
+直播网站，聊天工具等
+```
 
+#### 软件截图:
+```
+Linux（Cinnamon桌面）系统下的效果
+```
+![Linux（Cinnamon桌面）系统下的效果](https://img-blog.csdnimg.cn/20201210215055933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Linux（Cinnamon桌面）系统下的效果](https://img-blog.csdnimg.cn/20201210215055269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+
+```
+Windows 10系统下的效果
+```
 ![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20201210215122367.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
 ![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20201210215122152.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
-
 
 #### 使用方法:
 ```
@@ -58,9 +67,7 @@ $ go build  -ldflags="-H windowsgui"
 ```
 
 #### Licences
-
 crazyreply is licenced under [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
 ```
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

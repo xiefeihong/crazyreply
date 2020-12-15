@@ -24,15 +24,13 @@ func ShowApp() {
 		win.SetSizeRequest(450, 450)
 		win.SetTitle("疯狂回复")
 		book, _ = gtk.NotebookNew()
-		//for lab, msgs := range utils.Settings.Tags {
-		utils.SortedMap(utils.Settings.Tags, func(lab string, v interface{}) {
-			msgs := v.([]string)
-			bookPage := createBookPage(lab, msgs)
-			bottonAspectFrame := createBottonAspectFrame(lab)
+		for tagIndex, tag := range utils.Settings.Tags {
+			bookPage := createBookPage(tagIndex, tag.Msgs)
+			bottonAspectFrame := createBottonAspectFrame(tagIndex, tag.Label)
 			bookPage.Add(bottonAspectFrame)
-			label, _ := gtk.LabelNew(lab)
+			label, _ := gtk.LabelNew(tag.Label)
 			book.AppendPage(bookPage, label)
-		})
+		}
 		win.Add(book)
 		application.AddWindow(win)
 		win.ShowAll()
@@ -40,7 +38,7 @@ func ShowApp() {
 	os.Exit(application.Run(os.Args))
 }
 
-func createBookPage(pageLabel string, msgs []string) *gtk.Box {
+func createBookPage(pageIndex int, msgs []string) *gtk.Box {
 	topBox, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
 	hdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
 	vdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
@@ -66,7 +64,7 @@ func createBookPage(pageLabel string, msgs []string) *gtk.Box {
 		}
 		textBox, textEnrty := createInputBox(inputLabel, msg)
 		textsBox.Add(textBox)
-		utils.Texts[pageLabel] = append(utils.Texts[pageLabel], textEnrty)
+		utils.Texts[pageIndex] = append(utils.Texts[pageIndex], textEnrty)
 	}
 	topBox.Add(scrolledWindow)
 	return topBox
@@ -85,7 +83,7 @@ func createInputBox(inputLabel string, messages string) (*gtk.Box, *gtk.Entry) {
 	return lineBox, inputEntry
 }
 
-func createBottonAspectFrame(label string) *gtk.AspectFrame {
+func createBottonAspectFrame(tagIndex int, label string) *gtk.AspectFrame {
 	bottonAspectFrame, _ := gtk.AspectFrameNew("", 0.5, 0.5, 1, true)
 	bottonAspectFrame.SetShadowType(gtk.SHADOW_NONE)
 	bottonAspectFrame.SetMarginBottom(10)
@@ -101,13 +99,13 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 		}
 	})
 	startBtn.Connect("clicked", func() {
-		utils.PageLabel = label
+		utils.PageIndex = tagIndex
 		utils.BottonLabel, _ = startBtn.GetLabel()
 		if utils.BottonLabel == "开始" {
-			msgs := utils.Settings.Tags[label]
+			msgs := utils.Settings.Tags[tagIndex].Msgs
 			var validNum = 0
 			for i := 0; i < utils.Settings.EditNum; i++ {
-				str, _ := utils.Texts[label][i].GetText()
+				str, _ := utils.Texts[tagIndex][i].GetText()
 				if str != "" {
 					if i < len(msgs) {
 						msgs[i] = str
@@ -120,7 +118,7 @@ func createBottonAspectFrame(label string) *gtk.AspectFrame {
 			if validNum < len(msgs) {
 				msgs = msgs[:validNum]
 			}
-			utils.Settings.Tags[label] = msgs
+			utils.Settings.Tags[tagIndex].Msgs = msgs
 			utils.SettingToFile()
 			utils.BottonLabel = "结束"
 			robotgo.KeyTap("tab")

@@ -30,7 +30,7 @@ type Setting struct {
 
 var (
 	Root string
-	Texts = make(map[int][]*gtk.Entry, 0)
+	Texts = make([][]*gtk.Entry, 0)
 	PageIndex int
 	BottonLabel string
 	Settings Setting
@@ -66,7 +66,7 @@ func CarryReply(button *gtk.Button) {
 	button.SetLabel(BottonLabel)
 }
 
-func setText(texts map[int][]*gtk.Entry, disable bool) {
+func setText(texts [][]*gtk.Entry, disable bool) {
 	for _, msgs := range texts {
 		for _, entry := range msgs {
 			entry.SetEditable(disable)

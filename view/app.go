@@ -25,8 +25,8 @@ func ShowApp() {
 		win.SetTitle("疯狂回复")
 		book, _ = gtk.NotebookNew()
 		for tagIndex, tag := range utils.Settings.Tags {
-			bookPage := createBookPage(tagIndex, tag.Msgs)
-			bottonAspectFrame := createBottonAspectFrame(tagIndex, tag.Label)
+			bookPage := createBookPage(tag.Msgs)
+			bottonAspectFrame := createBottonAspectFrame(tagIndex)
 			bookPage.Add(bottonAspectFrame)
 			label, _ := gtk.LabelNew(tag.Label)
 			book.AppendPage(bookPage, label)
@@ -38,7 +38,7 @@ func ShowApp() {
 	os.Exit(application.Run(os.Args))
 }
 
-func createBookPage(pageIndex int, msgs []string) *gtk.Box {
+func createBookPage(msgs []string) *gtk.Box {
 	topBox, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
 	hdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
 	vdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
@@ -54,6 +54,7 @@ func createBookPage(pageIndex int, msgs []string) *gtk.Box {
 	scrolledWindow.SetMarginEnd(10)
 	viewport.Add(aspectFrame)
 	aspectFrame.Add(textsBox)
+	ts := make([]*gtk.Entry, 0)
 	for i := 0; i < utils.Settings.EditNum; i++ {
 		inputLabel := strconv.FormatInt(int64(i + 1), 10) + ": "
 		var msg string
@@ -64,8 +65,9 @@ func createBookPage(pageIndex int, msgs []string) *gtk.Box {
 		}
 		textBox, textEnrty := createInputBox(inputLabel, msg)
 		textsBox.Add(textBox)
-		utils.Texts[pageIndex] = append(utils.Texts[pageIndex], textEnrty)
+		ts = append(ts, textEnrty)
 	}
+	utils.Texts = append(utils.Texts, ts)
 	topBox.Add(scrolledWindow)
 	return topBox
 }
@@ -83,7 +85,7 @@ func createInputBox(inputLabel string, messages string) (*gtk.Box, *gtk.Entry) {
 	return lineBox, inputEntry
 }
 
-func createBottonAspectFrame(tagIndex int, label string) *gtk.AspectFrame {
+func createBottonAspectFrame(tagIndex int) *gtk.AspectFrame {
 	bottonAspectFrame, _ := gtk.AspectFrameNew("", 0.5, 0.5, 1, true)
 	bottonAspectFrame.SetShadowType(gtk.SHADOW_NONE)
 	bottonAspectFrame.SetMarginBottom(10)
@@ -120,11 +122,13 @@ func createBottonAspectFrame(tagIndex int, label string) *gtk.AspectFrame {
 			}
 			utils.Settings.Tags[tagIndex].Msgs = msgs
 			utils.SettingToFile()
-			utils.BottonLabel = "结束"
-			robotgo.KeyTap("tab")
-			time.Sleep(50 * time.Millisecond)
-			go utils.CarryReply(startBtn)
-			go utils.KeyDownEvent(utils.Settings.EndKeys)
+			if len(msgs) != 0 {
+				utils.BottonLabel = "结束"
+				robotgo.KeyTap("tab")
+				time.Sleep(50 * time.Millisecond)
+				go utils.CarryReply(startBtn)
+				go utils.KeyDownEvent(utils.Settings.EndKeys)
+			}
 		} else if utils.BottonLabel == "结束" {
 			utils.BottonLabel = "开始"
 		}

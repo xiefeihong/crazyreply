@@ -10,7 +10,7 @@ import (
 func Reverse(list []string){
 	var temp string
 	kl := len(list)
-	for i := 0; i < kl; i +=2 {
+	for i := 0; i < kl / 2; i ++ {
 		temp = list[i]
 		list[i] = list[kl - i - 1]
 		list[kl -i - 1] = temp

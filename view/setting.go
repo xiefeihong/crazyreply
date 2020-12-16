@@ -10,7 +10,7 @@ import (
 
 var (
 	labelEntrys []*gtk.Entry
-	vsDown []uint16
+	vsHold []uint16
 	vsUp []uint16
 	end bool
 )
@@ -73,8 +73,6 @@ func ShowSetting() {
 	})
 	endKeysEntry.Connect("focus_in_event", func() {
 		end = false
-		vsDown = make([]uint16, 0)
-		vsUp = make([]uint16, 0)
 	})
 	endKeysEntry.Connect("focus_out_event", func() {
 		end = true
@@ -85,38 +83,30 @@ func ShowSetting() {
 	settingsToUI(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, textLabsBox, endKeysEntry, randomSwitch, withoutStopSwitch, persionSwitch)
 	win.ShowAll()
 	end = true
-	go KeyUpEvent(win, endKeysEntry)
+	go keyUpEvent(endKeysEntry)
 }
 
-func KeyUpEvent(win *gtk.Window, endKeysEntry *gtk.Entry) {
+func keyUpEvent(endKeysEntry *gtk.Entry) {
 	EvChan := hook.Start()
-	oldKeys, _ := endKeysEntry.GetText()
 	for ev := range EvChan {
-		if ev.Kind == hook.KeyDown || ev.Kind == hook.KeyUp {
+		if ev.Kind == hook.KeyHold || ev.Kind == hook.KeyUp {
 			if !end {
-				if ev.Kind == hook.KeyDown {
-					vsDown = append(vsDown, ev.Keycode)
-				} else {
+				if ev.Kind == hook.KeyUp {
 					vsUp = append(vsUp, ev.Keycode)
+				} else {
+					vsHold = append(vsHold, ev.Keycode)
 				}
 				ks := make([]string, 0)
 				for _, v := range vsUp {
 					k := utils.KeyCode[v]
 					ks = append(ks, k)
 				}
-				if len(vsDown) == len(vsUp) {
+				if len(vsHold) == len(vsUp) {
 					utils.Reverse(ks)
-					newKeys := strings.Join(ks, "\t")
-					dialog := gtk.MessageDialogNew(win, gtk.DIALOG_MODAL, gtk.MESSAGE_QUESTION,gtk.BUTTONS_YES_NO, "将退出快捷键设置为[ %s ]？", newKeys)
-					dialog.SetTitle("退出快捷键设置")
-					flag := dialog.Run()
-					if flag == gtk.RESPONSE_YES {
-						endKeysEntry.SetText(newKeys)
-						oldKeys = newKeys
-					} else if flag == gtk.RESPONSE_NO {
-						endKeysEntry.SetText(oldKeys)
-					}
-					dialog.Destroy()
+					newKeys := strings.Join(ks, "    ")
+					endKeysEntry.SetText(newKeys)
+					vsHold = make([]uint16, 0)
+					vsUp = make([]uint16, 0)
 				}
 			}
 		}

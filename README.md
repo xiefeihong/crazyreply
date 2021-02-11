@@ -39,7 +39,7 @@ Windows 10系统下的效果
 
 ### 建需要的软件:
 ```
-golang 1.15.2
+golang
 git
 ```
 

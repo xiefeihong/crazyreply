@@ -13,6 +13,8 @@ var (
 	vsHold []uint16
 	vsUp []uint16
 	end bool
+	replyNumBox *gtk.Box
+	withoutStopSwitch *gtk.Switch
 )
 
 func ShowSetting() {
@@ -23,34 +25,39 @@ func ShowSetting() {
 	winObj, _ := builder.GetObject("win")
 	win := winObj.(*gtk.Window)
 	dateLimitObj, _ := builder.GetObject("date_limit")
+	replyNumBoxObj, _ := builder.GetObject("reply_num_box")
 	replyNumObj, _ := builder.GetObject("reply_num")
 	editNumObj, _ := builder.GetObject("edit_num")
 	endKeysObj, _ := builder.GetObject("end_keys")
 	randomObj, _ := builder.GetObject("random")
 	withoutStopObj, _ := builder.GetObject("without_stop")
-	persionObj, _ := builder.GetObject("persion")
+	averageObj, _ := builder.GetObject("average")
 	buttonDecreaseObj, _ := builder.GetObject("btn-")
 	textLabsObj, _ := builder.GetObject("lab-texts")
 	buttonIncreaseObj, _ := builder.GetObject("btn+")
 	cancelObj, _ := builder.GetObject("btn-cancel")
 	preserveObj, _ := builder.GetObject("btn-preserve")
 	dateLimitSpinBtn := dateLimitObj.(*gtk.SpinButton)
+	replyNumBox = replyNumBoxObj.(*gtk.Box)
 	replyNumSpinBtn := replyNumObj.(*gtk.SpinButton)
 	editNumSpinBtn := editNumObj.(*gtk.SpinButton)
 	endKeysEntry := endKeysObj.(*gtk.Entry)
 	randomSwitch := randomObj.(*gtk.Switch)
-	withoutStopSwitch := withoutStopObj.(*gtk.Switch)
-	persionSwitch := persionObj.(*gtk.Switch)
+	withoutStopSwitch = withoutStopObj.(*gtk.Switch)
+	averageSwitch := averageObj.(*gtk.Switch)
 	buttonDecreaseBtn := buttonDecreaseObj.(*gtk.Button)
 	textLabsBox := textLabsObj.(*gtk.Box)
-	buttonIncrease := buttonIncreaseObj.(*gtk.Button)
+	buttonIncreaseBtn := buttonIncreaseObj.(*gtk.Button)
 	cancelBtn := cancelObj.(*gtk.Button)
 	preserveBtn := preserveObj.(*gtk.Button)
+	withoutStopSwitch.Connect("state-set", func() {
+		setReplyNumBox()
+	})
 	cancelBtn.Connect("clicked", func() {
 		win.Close()
 	})
 	preserveBtn.Connect("clicked", func() {
-		restart := setSetting(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, labelEntrys, endKeysEntry, randomSwitch, withoutStopSwitch, persionSwitch)
+		restart := setSetting(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, labelEntrys, endKeysEntry, randomSwitch, averageSwitch)
 		if restart {
 			dialog := gtk.MessageDialogNew(win, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, "%s", "请重新打开此程序")
 			dialog.Run()
@@ -58,7 +65,7 @@ func ShowSetting() {
 		}
 		win.Close()
 	})
-	buttonIncrease.Connect("clicked", func() {
+	buttonIncreaseBtn.Connect("clicked", func() {
 		entry, _ := gtk.EntryNew()
 		textLabsBox.Add(entry)
 		labelEntrys = append(labelEntrys, entry)
@@ -80,8 +87,9 @@ func ShowSetting() {
 	win.Connect("destroy", func() {
 		defer hook.End()
 	})
-	settingsToUI(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, textLabsBox, endKeysEntry, randomSwitch, withoutStopSwitch, persionSwitch)
+	settingsToUI(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, textLabsBox, endKeysEntry, randomSwitch, averageSwitch)
 	win.ShowAll()
+	setReplyNumBox()
 	end = true
 	go keyUpEvent(endKeysEntry)
 }
@@ -113,19 +121,18 @@ func keyUpEvent(endKeysEntry *gtk.Entry) {
 	}
 }
 
-func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabEntrys []*gtk.Entry,
-		endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, withoutStopSwitch *gtk.Switch, persionSwitch *gtk.Switch) bool {
+func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabEntrys []*gtk.Entry, endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, averageSwitch *gtk.Switch) bool {
 	dateLimitStr, _ := dateLimitSpinBtn.GetText()
 	replyNumStr, _ := replyNumSpinBtn.GetText()
 	editNumStr, _ := editNumSpinBtn.GetText()
 	endKeyStr, _ := endKeysEntry.GetText()
-	dateLimit, _ := strconv.Atoi(dateLimitStr[:len(dateLimitStr)-3])
-	replyNum, _ := strconv.Atoi(replyNumStr[:len(replyNumStr)-3])
-	editNum, _ := strconv.Atoi(editNumStr[:len(editNumStr)-3])
+	dateLimit, _ := strconv.Atoi(dateLimitStr)
+	replyNum, _ := strconv.Atoi(replyNumStr)
+	editNum, _ := strconv.Atoi(editNumStr)
 	endKeys := strings.Fields(endKeyStr)
 	random := randomSwitch.GetActive()
 	withoutStop := withoutStopSwitch.GetActive()
-	persion := persionSwitch.GetActive()
+	average := averageSwitch.GetActive()
 	restart := false
 	if editNum != utils.Settings.EditNum {
 		restart = true
@@ -141,7 +148,7 @@ func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButto
 			var msgs []string
 			if pageIndex + 1 < tagLen {
 				msgs = utils.Settings.Tags[pageIndex].Msgs
-				if  utils.Settings.Tags[pageIndex].Label != text {
+				if utils.Settings.Tags[pageIndex].Label != text {
 					restart = true
 				}
 			} else {
@@ -150,13 +157,12 @@ func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButto
 			tags = append(tags, utils.Tag{text, msgs})
 		}
 	}
-	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, endKeys, random, withoutStop, persion}
+	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, endKeys, random, withoutStop, average}
 	utils.SettingToFile()
 	return restart
 }
 
-func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabsBox *gtk.Box,
-		endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, withoutStopSwitch *gtk.Switch, persionSwitch *gtk.Switch) {
+func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabsBox *gtk.Box, endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, averageSwitch *gtk.Switch) {
 	dateLimitSpinBtn.SetValue(float64(utils.Settings.DateLimit))
 	replyNumSpinBtn.SetValue(float64(utils.Settings.ReplyNum))
 	editNumSpinBtn.SetValue(float64(utils.Settings.EditNum))
@@ -170,5 +176,13 @@ func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinBut
 	endKeysEntry.SetText(strings.Join(utils.Settings.EndKeys, "\t"))
 	randomSwitch.SetActive(utils.Settings.Random)
 	withoutStopSwitch.SetActive(utils.Settings.WithoutStop)
-	persionSwitch.SetActive(utils.Settings.Persion)
+	averageSwitch.SetActive(utils.Settings.Average)
+}
+
+func setReplyNumBox() {
+	if withoutStopSwitch.GetActive() {
+		replyNumBox.Hide()
+	} else {
+		replyNumBox.Show()
+	}
 }

@@ -3,7 +3,6 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/go-vgo/robotgo"
 	"github.com/go-vgo/robotgo/clipboard"
 	"github.com/gotk3/gotk3/gtk"
@@ -25,7 +24,7 @@ type Setting struct {
 	EndKeys []string `json:"end_keys"`
 	Random bool `json:"random"`
 	WithoutStop bool `json:"without_stop"`
-	Persion bool `json:"persion"`
+	Average bool `json:"average"`
 }
 
 var (
@@ -39,6 +38,10 @@ var (
 		51:",",52:".",53:"/",59:"f1",60:"f2",61:"f3",62:"f4",63:"f5",64:"f6",65:"f7",66:"f8",67:"f9",68:"f10",69:"f11",70:"f12",
 		1:"esc",14:"delete",15:"tab",29:"control",56:"alt",57:"space",42:"shift",54:"rshift",28:"enter",3675:"command",3676:"rcmd",3640:"ralt",57416:"up",57424:"down",57419:"left",57421:"right"}
 )
+
+func Init() {
+
+}
 
 func CarryReply(button *gtk.Button) {
 	msgs := Settings.Tags[PageIndex].Msgs
@@ -76,25 +79,20 @@ func setText(texts [][]*gtk.Entry, disable bool) {
 
 func reply(message string){
 	var date int
-	if !Settings.Persion {
-		date = Settings.DateLimit
+	if Settings.Average {
+		date = rand.Intn(Settings.DateLimit) + Settings.DateLimit / 2
 	} else {
-		date = rand.Intn(100) * Settings.DateLimit
+		date = Settings.DateLimit
 	}
 	clipboard.WriteAll(message)
-	t := time.Duration(date)
-	time.Sleep(t * time.Millisecond)
 	robotgo.KeyTap("v", "ctrl")
-	time.Sleep(t * time.Millisecond)
 	robotgo.KeyTap("enter")
-	time.Sleep(t * time.Millisecond)
-	fmt.Print(".")
+	time.Sleep(time.Duration(date) * time.Millisecond)
 }
 
 func KeyDownEvent(keys []string){
 	hook.Register(hook.KeyDown, keys, func(e hook.Event) {
 		BottonLabel = "开始"
-		fmt.Println(keys)
 	})
 	s := hook.Start()
 	<-hook.Process(s)

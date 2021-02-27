@@ -5,7 +5,7 @@
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100000</property>
     <property name="value">50</property>
-    <property name="step-increment">50</property>
+    <property name="step-increment">100</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">10</property>
@@ -50,185 +50,246 @@
                     <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox">
+                        <property name="height-request">161</property>
                         <property name="visible">1</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkBox">
                             <property name="visible">1</property>
-                            <property name="label">时间间隔: </property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="date_limit">
-                            <property name="visible">1</property>
-                            <property name="halign">start</property>
-                            <property name="width-chars">5</property>
-                            <property name="adjustment">adjustment1</property>
-                            <property name="climb-rate">1</property>
-                            <property name="digits">2</property>
-                            <property name="numeric">1</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">1</property>
+                                <property name="label">时间间隔: </property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="date_limit">
+                                <property name="visible">1</property>
+                                <property name="can-focus">1</property>
+                                <property name="width-chars">5</property>
+                                <property name="adjustment">adjustment1</property>
+                                <property name="climb-rate">1</property>
+                                <property name="numeric">1</property>
+                                <property name="update-policy">if-valid</property>
+                              </object>
+                              <packing>
+                                <property name="expand">1</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
+                            <property name="fill">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="reply_num_box">
+                            <property name="visible">1</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">1</property>
+                                <property name="label">最大次数: </property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="reply_num">
+                                <property name="visible">1</property>
+                                <property name="can-focus">1</property>
+                                <property name="width-chars">5</property>
+                                <property name="adjustment">adjustment2</property>
+                                <property name="climb-rate">1</property>
+                                <property name="numeric">1</property>
+                                <property name="update-policy">if-valid</property>
+                              </object>
+                              <packing>
+                                <property name="expand">1</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">1</property>
-                        <property name="spacing">10</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkBox">
                             <property name="visible">1</property>
-                            <property name="label">最大次数: </property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="reply_num">
-                            <property name="visible">1</property>
-                            <property name="halign">start</property>
-                            <property name="width-chars">5</property>
-                            <property name="adjustment">adjustment2</property>
-                            <property name="climb-rate">1</property>
-                            <property name="digits">2</property>
-                            <property name="numeric">1</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">1</property>
+                                <property name="label">编辑条数: </property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="edit_num">
+                                <property name="visible">1</property>
+                                <property name="can-focus">1</property>
+                                <property name="width-chars">5</property>
+                                <property name="adjustment">adjustment3</property>
+                                <property name="climb-rate">1</property>
+                                <property name="numeric">1</property>
+                                <property name="update-policy">if-valid</property>
+                              </object>
+                              <packing>
+                                <property name="expand">1</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
-                            <property name="position">1</property>
+                            <property name="fill">0</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">1</property>
+                                <property name="label">快捷终止: </property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="end_keys">
+                                <property name="visible">1</property>
+                                <property name="can-focus">1</property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="fill">0</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
+                        <property name="fill">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">1</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">10</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">1</property>
+                                <property name="label">随机消息: </property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSwitch" id="random">
+                                <property name="visible">1</property>
+                                <property name="can-focus">1</property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="fill">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">1</property>
+                                <property name="label">连续不停: </property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSwitch" id="without_stop">
+                                <property name="visible">1</property>
+                                <property name="can-focus">1</property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="fill">0</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">1</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">1</property>
+                                <property name="label">间隔平均: </property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSwitch" id="average">
+                                <property name="visible">1</property>
+                                <property name="can-focus">1</property>
+                              </object>
+                              <packing>
+                                <property name="fill">0</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="fill">0</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="fill">0</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">1</property>
-                        <property name="spacing">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">1</property>
-                            <property name="label">编辑条数: </property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="edit_num">
-                            <property name="visible">1</property>
-                            <property name="halign">start</property>
-                            <property name="width-chars">5</property>
-                            <property name="adjustment">adjustment3</property>
-                            <property name="climb-rate">1</property>
-                            <property name="digits">2</property>
-                            <property name="numeric">1</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">1</property>
-                        <property name="spacing">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">1</property>
-                            <property name="label">快捷终止: </property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="end_keys">
-                            <property name="visible">1</property>
-                            <property name="can-focus">1</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">1</property>
-                        <property name="spacing">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">1</property>
-                            <property name="label">是否随机: </property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSwitch" id="random">
-                            <property name="visible">1</property>
-                            <property name="can-focus">1</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">1</property>
-                        <property name="spacing">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">1</property>
-                            <property name="label">连续不停: </property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSwitch" id="without_stop">
-                            <property name="visible">1</property>
-                            <property name="can-focus">1</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">1</property>
-                        <property name="spacing">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">1</property>
-                            <property name="label">模拟真人: </property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSwitch" id="persion">
-                            <property name="visible">1</property>
-                            <property name="can-focus">1</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">7</property>
-                      </packing>
-                    </child>
                   </object>
+                  <packing>
+                    <property name="fill">0</property>
+                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox">

@@ -7,7 +7,6 @@ import (
 	"github.com/xiefeihong/crazyreply/utils"
 	"os"
 	"strconv"
-	"time"
 )
 
 var book *gtk.Notebook
@@ -19,23 +18,28 @@ func ShowApp() {
 		panic(err)
 	}
 	application.Connect("activate", func() {
-		win, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
-		win.SetIconFromFile(utils.Root + "/view/ui/icon.ico")
-		win.SetSizeRequest(450, 450)
-		win.SetTitle("疯狂回复")
-		book, _ = gtk.NotebookNew()
-		for tagIndex, tag := range utils.Settings.Tags {
-			bookPage := createBookPage(tag.Msgs)
-			bottonAspectFrame := createBottonAspectFrame(tagIndex)
-			bookPage.Add(bottonAspectFrame)
-			label, _ := gtk.LabelNew(tag.Label)
-			book.AppendPage(bookPage, label)
-		}
-		win.Add(book)
+		var win = createAppWin()
 		application.AddWindow(win)
 		win.ShowAll()
 	})
 	os.Exit(application.Run(os.Args))
+}
+
+func createAppWin() *gtk.Window {
+	win, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
+	win.SetIconFromFile(utils.Root + "/view/ui/icon.ico")
+	win.SetSizeRequest(450, 450)
+	win.SetTitle("疯狂回复")
+	book, _ = gtk.NotebookNew()
+	for tagIndex, tag := range utils.Settings.Tags {
+		bookPage := createBookPage(tag.Msgs)
+		bottonAspectFrame := createBottonAspectFrame(tagIndex)
+		bookPage.Add(bottonAspectFrame)
+		label, _ := gtk.LabelNew(tag.Label)
+		book.AppendPage(bookPage, label)
+	}
+	win.Add(book)
+	return win
 }
 
 func createBookPage(msgs []string) *gtk.Box {
@@ -125,7 +129,6 @@ func createBottonAspectFrame(tagIndex int) *gtk.AspectFrame {
 			if len(msgs) != 0 {
 				utils.BottonLabel = "结束"
 				robotgo.KeyTap("tab")
-				time.Sleep(50 * time.Millisecond)
 				go utils.CarryReply(startBtn)
 				go utils.KeyDownEvent(utils.Settings.EndKeys)
 			}

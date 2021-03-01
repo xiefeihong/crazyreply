@@ -1,6 +1,7 @@
 package view
 
 import (
+	"github.com/go-vgo/robotgo"
 	"github.com/gotk3/gotk3/gtk"
 	hook "github.com/robotn/gohook"
 	"github.com/xiefeihong/crazyreply/utils"
@@ -12,9 +13,10 @@ var (
 	labelEntrys []*gtk.Entry
 	vsHold []uint16
 	vsUp []uint16
-	end bool
 	replyNumBox *gtk.Box
-	withoutStopSwitch *gtk.Switch
+	beforeKeysBox *gtk.Box
+	withoutStopCheckButton *gtk.CheckButton
+	beforeCheckButton *gtk.CheckButton
 )
 
 func ShowSetting() {
@@ -28,36 +30,45 @@ func ShowSetting() {
 	replyNumBoxObj, _ := builder.GetObject("reply_num_box")
 	replyNumObj, _ := builder.GetObject("reply_num")
 	editNumObj, _ := builder.GetObject("edit_num")
+	beforeKeysBoxObj, _ := builder.GetObject("before_keys_box")
+	beforeKeysObj, _ := builder.GetObject("before_keys")
 	endKeysObj, _ := builder.GetObject("end_keys")
 	randomObj, _ := builder.GetObject("random")
 	withoutStopObj, _ := builder.GetObject("without_stop")
 	averageObj, _ := builder.GetObject("average")
+	beforeObj, _ := builder.GetObject("before")
 	buttonDecreaseObj, _ := builder.GetObject("btn-")
-	textLabsObj, _ := builder.GetObject("lab-texts")
+	textLabsObj, _ := builder.GetObject("lab_texts")
 	buttonIncreaseObj, _ := builder.GetObject("btn+")
-	cancelObj, _ := builder.GetObject("btn-cancel")
-	preserveObj, _ := builder.GetObject("btn-preserve")
+	cancelObj, _ := builder.GetObject("btn_cancel")
+	preserveObj, _ := builder.GetObject("btn_preserve")
 	dateLimitSpinBtn := dateLimitObj.(*gtk.SpinButton)
 	replyNumBox = replyNumBoxObj.(*gtk.Box)
 	replyNumSpinBtn := replyNumObj.(*gtk.SpinButton)
 	editNumSpinBtn := editNumObj.(*gtk.SpinButton)
+	beforeKeysBox = beforeKeysBoxObj.(*gtk.Box)
+	beforeKeysEntry := beforeKeysObj.(*gtk.Entry)
 	endKeysEntry := endKeysObj.(*gtk.Entry)
-	randomSwitch := randomObj.(*gtk.Switch)
-	withoutStopSwitch = withoutStopObj.(*gtk.Switch)
-	averageSwitch := averageObj.(*gtk.Switch)
+	randomCheckButton := randomObj.(*gtk.CheckButton)
+	withoutStopCheckButton = withoutStopObj.(*gtk.CheckButton)
+	averageCheckButton := averageObj.(*gtk.CheckButton)
+	beforeCheckButton = beforeObj.(*gtk.CheckButton)
 	buttonDecreaseBtn := buttonDecreaseObj.(*gtk.Button)
 	textLabsBox := textLabsObj.(*gtk.Box)
 	buttonIncreaseBtn := buttonIncreaseObj.(*gtk.Button)
 	cancelBtn := cancelObj.(*gtk.Button)
 	preserveBtn := preserveObj.(*gtk.Button)
-	withoutStopSwitch.Connect("state-set", func() {
+	withoutStopCheckButton.Connect("toggled", func() {
 		setReplyNumBox()
+	})
+	beforeCheckButton.Connect("toggled", func() {
+		setBeforeBox()
 	})
 	cancelBtn.Connect("clicked", func() {
 		win.Close()
 	})
 	preserveBtn.Connect("clicked", func() {
-		restart := setSetting(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, labelEntrys, endKeysEntry, randomSwitch, averageSwitch)
+		restart := setSetting(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, beforeKeysEntry, endKeysEntry, randomCheckButton, averageCheckButton, beforeCheckButton, labelEntrys)
 		if restart {
 			dialog := gtk.MessageDialogNew(win, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, "%s", "请重新打开此程序")
 			dialog.Run()
@@ -78,61 +89,64 @@ func ShowSetting() {
 			labelEntrys = append(labelEntrys[:removeIndex])
 		}
 	})
+	beforeKeysEntry.Connect("focus_in_event", func() {
+		go keyUpEvent(beforeKeysEntry)
+	})
+	beforeKeysEntry.Connect("focus_out_event", func() {
+		robotgo.EventEnd()
+	})
 	endKeysEntry.Connect("focus_in_event", func() {
-		end = false
+		go keyUpEvent(endKeysEntry)
 	})
 	endKeysEntry.Connect("focus_out_event", func() {
-		end = true
+		robotgo.EventEnd()
 	})
-	win.Connect("destroy", func() {
-		defer hook.End()
-	})
-	settingsToUI(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, textLabsBox, endKeysEntry, randomSwitch, averageSwitch)
+	settingsToUI(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, beforeKeysEntry, endKeysEntry, randomCheckButton, averageCheckButton, beforeCheckButton, textLabsBox)
 	win.ShowAll()
 	setReplyNumBox()
-	end = true
-	go keyUpEvent(endKeysEntry)
+	setBeforeBox()
 }
 
-func keyUpEvent(endKeysEntry *gtk.Entry) {
-	EvChan := hook.Start()
-	for ev := range EvChan {
+func keyUpEvent(keysEntry *gtk.Entry) {
+	evChan := robotgo.EventStart()
+	for ev := range evChan {
 		if ev.Kind == hook.KeyHold || ev.Kind == hook.KeyUp {
-			if !end {
-				if ev.Kind == hook.KeyUp {
-					vsUp = append(vsUp, ev.Keycode)
-				} else {
-					vsHold = append(vsHold, ev.Keycode)
-				}
-				ks := make([]string, 0)
-				for _, v := range vsUp {
-					k := utils.KeyCode[v]
-					ks = append(ks, k)
-				}
-				if len(vsHold) == len(vsUp) {
-					utils.Reverse(ks)
-					newKeys := strings.Join(ks, "    ")
-					endKeysEntry.SetText(newKeys)
-					vsHold = make([]uint16, 0)
-					vsUp = make([]uint16, 0)
-				}
+			if ev.Kind == hook.KeyUp {
+				vsUp = append(vsUp, ev.Keycode)
+			} else {
+				vsHold = append(vsHold, ev.Keycode)
+			}
+			ks := make([]string, 0)
+			for _, v := range vsUp {
+				k := utils.KeyCode[v]
+				ks = append(ks, k)
+			}
+			if len(vsHold) == len(vsUp) {
+				utils.Reverse(ks)
+				newKeys := strings.Join(ks, "    ")
+				keysEntry.SetText(newKeys)
+				vsHold = make([]uint16, 0)
+				vsUp = make([]uint16, 0)
 			}
 		}
 	}
 }
 
-func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabEntrys []*gtk.Entry, endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, averageSwitch *gtk.Switch) bool {
+func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, beforeKeysEntry *gtk.Entry, endKeysEntry *gtk.Entry, randomCheckButton *gtk.CheckButton, averageCheckButton *gtk.CheckButton, beforeCheckButton *gtk.CheckButton, textLabEntrys []*gtk.Entry) bool {
 	dateLimitStr, _ := dateLimitSpinBtn.GetText()
 	replyNumStr, _ := replyNumSpinBtn.GetText()
 	editNumStr, _ := editNumSpinBtn.GetText()
+	beforeKeyStr, _ := beforeKeysEntry.GetText()
 	endKeyStr, _ := endKeysEntry.GetText()
 	dateLimit, _ := strconv.Atoi(dateLimitStr)
 	replyNum, _ := strconv.Atoi(replyNumStr)
 	editNum, _ := strconv.Atoi(editNumStr)
+	beforeKeys := strings.Fields(beforeKeyStr)
 	endKeys := strings.Fields(endKeyStr)
-	random := randomSwitch.GetActive()
-	withoutStop := withoutStopSwitch.GetActive()
-	average := averageSwitch.GetActive()
+	random := randomCheckButton.GetActive()
+	withoutStop := withoutStopCheckButton.GetActive()
+	average := averageCheckButton.GetActive()
+	before := beforeCheckButton.GetActive()
 	restart := false
 	if editNum != utils.Settings.EditNum {
 		restart = true
@@ -157,12 +171,12 @@ func setSetting(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButto
 			tags = append(tags, utils.Tag{text, msgs})
 		}
 	}
-	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, endKeys, random, withoutStop, average}
+	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, beforeKeys, endKeys, random, withoutStop, average, before}
 	utils.SettingToFile()
 	return restart
 }
 
-func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, textLabsBox *gtk.Box, endKeysEntry *gtk.Entry, randomSwitch *gtk.Switch, averageSwitch *gtk.Switch) {
+func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, beforeKeysEntry *gtk.Entry, endKeysEntry *gtk.Entry, randomCheckButton *gtk.CheckButton, averageCheckButton *gtk.CheckButton, beforeCheckButton *gtk.CheckButton, textLabsBox *gtk.Box) {
 	dateLimitSpinBtn.SetValue(float64(utils.Settings.DateLimit))
 	replyNumSpinBtn.SetValue(float64(utils.Settings.ReplyNum))
 	editNumSpinBtn.SetValue(float64(utils.Settings.EditNum))
@@ -173,16 +187,26 @@ func settingsToUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinBut
 		textLabsBox.Add(textLabEntry)
 		labelEntrys = append(labelEntrys, textLabEntry)
 	}
+	beforeKeysEntry.SetText(strings.Join(utils.Settings.BeforeKeys, "\t"))
 	endKeysEntry.SetText(strings.Join(utils.Settings.EndKeys, "\t"))
-	randomSwitch.SetActive(utils.Settings.Random)
-	withoutStopSwitch.SetActive(utils.Settings.WithoutStop)
-	averageSwitch.SetActive(utils.Settings.Average)
+	randomCheckButton.SetActive(utils.Settings.Random)
+	withoutStopCheckButton.SetActive(utils.Settings.WithoutStop)
+	averageCheckButton.SetActive(utils.Settings.Average)
+	beforeCheckButton.SetActive(utils.Settings.Before)
 }
 
 func setReplyNumBox() {
-	if withoutStopSwitch.GetActive() {
+	if withoutStopCheckButton.GetActive() {
 		replyNumBox.Hide()
 	} else {
 		replyNumBox.Show()
+	}
+}
+
+func setBeforeBox() {
+	if beforeCheckButton.GetActive() {
+		beforeKeysBox.Show()
+	} else {
+		beforeKeysBox.Hide()
 	}
 }

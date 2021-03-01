@@ -8,7 +8,6 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	hook "github.com/robotn/gohook"
 	"math/rand"
-	"time"
 )
 
 type Tag struct {
@@ -21,10 +20,12 @@ type Setting struct {
 	ReplyNum int `json:"reply_num"`
 	EditNum int `json:"edit_num"`
 	Tags []Tag `json:"tags"`
+	BeforeKeys []string `json:"before_keys"`
 	EndKeys []string `json:"end_keys"`
 	Random bool `json:"random"`
 	WithoutStop bool `json:"without_stop"`
 	Average bool `json:"average"`
+	Before bool `json:"before"`
 }
 
 var (
@@ -38,10 +39,6 @@ var (
 		51:",",52:".",53:"/",59:"f1",60:"f2",61:"f3",62:"f4",63:"f5",64:"f6",65:"f7",66:"f8",67:"f9",68:"f10",69:"f11",70:"f12",
 		1:"esc",14:"delete",15:"tab",29:"control",56:"alt",57:"space",42:"shift",54:"rshift",28:"enter",3675:"command",3676:"rcmd",3640:"ralt",57416:"up",57424:"down",57419:"left",57421:"right"}
 )
-
-func Init() {
-
-}
 
 func CarryReply(button *gtk.Button) {
 	msgs := Settings.Tags[PageIndex].Msgs
@@ -63,7 +60,7 @@ func CarryReply(button *gtk.Button) {
 			break
 		}
 	}
-	defer hook.End()
+	robotgo.EventEnd()
 	setText(Texts, true)
 	BottonLabel = "开始"
 	button.SetLabel(BottonLabel)
@@ -78,31 +75,47 @@ func setText(texts [][]*gtk.Entry, disable bool) {
 }
 
 func reply(message string){
-	var date int
+	date := Settings.DateLimit
+	space := 30
 	if Settings.Average {
 		date = rand.Intn(Settings.DateLimit) + Settings.DateLimit / 2
-	} else {
-		date = Settings.DateLimit
+	}
+	if Settings.Before {
+		keys := Settings.BeforeKeys
+		keyLen := len(keys)
+		switch keyLen {
+		case 0:
+			break
+		case 1:
+			robotgo.KeyTap(keys[0])
+			break
+		default:
+			robotgo.KeyTap(keys[keyLen - 1], keys[:keyLen - 1])
+			break
+		}
+		robotgo.MilliSleep(space)
 	}
 	clipboard.WriteAll(message)
+	robotgo.MilliSleep(space)
 	robotgo.KeyTap("v", "ctrl")
+	robotgo.MilliSleep(space)
 	robotgo.KeyTap("enter")
-	time.Sleep(time.Duration(date) * time.Millisecond)
+	robotgo.MilliSleep(date)
 }
 
 func KeyDownEvent(keys []string){
-	hook.Register(hook.KeyDown, keys, func(e hook.Event) {
+	robotgo.EventHook(hook.KeyDown, keys, func(e hook.Event) {
 		BottonLabel = "开始"
 	})
-	s := hook.Start()
-	<-hook.Process(s)
+	s := robotgo.EventStart()
+	<-robotgo.EventProcess(s)
 }
 
 func StartSettings() {
 	defer func(){
 		if err := recover(); err != nil {
-			tags := []Tag{{"网友", make([]string, 0)}, {"弹幕", make([]string, 0)}}
-			Settings = Setting{50, 10, 10, tags, []string{"control", "t"}, true, false, false}
+			tags := []Tag{{"LOL", make([]string, 0)}, {"弹幕", make([]string, 0)}, {"网友", make([]string, 0)}}
+			Settings = Setting{50, 10, 10, tags, nil, []string{"control", "t"}, true, false, false, false}
 		}
 	}()
 	out := ReadBytesToFile(Root + "/config.json")

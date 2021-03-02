@@ -16,14 +16,16 @@
 ```
 Linux（Cinnamon桌面）系统下的效果
 ```
-![Linux（Cinnamon桌面）系统下的效果](https://img-blog.csdnimg.cn/20201210215055933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
-![Linux（Cinnamon桌面）系统下的效果](https://img-blog.csdnimg.cn/20201210215055269.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Linux（Cinnamon桌面）系统下的效果](https://img-blog.csdnimg.cn/20210302214021652.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Linux（Cinnamon桌面）系统下的效果](https://img-blog.csdnimg.cn/20210302214111312.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Linux（Cinnamon桌面）系统下的效果](https://img-blog.csdnimg.cn/2021030221411116.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
 
 ```
 Windows 10系统下的效果
 ```
-![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20201210215122367.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
-![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20201210215122152.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20210302214151617.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20210302214151332.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
+![Windows 10系统下的效果](https://img-blog.csdnimg.cn/20210302214151230.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmV6aGFuZG91,size_16,color_FFFFFF,t_70#pic_center)
 
 #### 使用方法:
 ```
@@ -47,23 +49,22 @@ git
 ```
 确保xclip，xsel两个命令中的一个可以正常使用
 $ dnf install gtk3-devel gdk-pixbuf2-devel glib2-devel \
-    libxkbcommon-x11-devel xorg-x11-xkb-utils-devel libxkbfile-devel
+    libxkbcommon-x11-devel
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ go build
 ```
-    
+
 #### Windows构建:
 ```
 推荐安装msys2
 $ pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-toolchain base-devel glib2-devel
-$ source ~/.bashrc
 $ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc # This fixes a bug in pkgconfig
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
-$ 创建文件crazyreply.rc；内容：IDI_ICON1 ICON "view/ui/icon.ico"
+$ echo IDI_ICON1 ICON "view/ui/icon.ico" > crazyreply.rc
 $ windres -o crazyreply.syso crazyreply.rc
-$ go build  -ldflags="-H windowsgui"
+$ go build -ldflags="-H windowsgui"
 ```
 
 #### Licences

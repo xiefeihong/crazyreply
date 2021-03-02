@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -266,6 +265,7 @@
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">1</property>
+                        <property name="margin-bottom">10</property>
                         <property name="label" translatable="yes">标签分类</property>
                       </object>
                     </child>
@@ -273,7 +273,6 @@
                       <object class="GtkScrolledWindow">
                         <property name="visible">1</property>
                         <property name="can-focus">1</property>
-                        <property name="margin-top">10</property>
                         <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkViewport">

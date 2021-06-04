@@ -39,17 +39,23 @@ Windows 10系统下的效果
 如果使用的linux版本的程序，要确保xclip，xsel两个命令中的一个可以正常使用。
 ```
 
-### 建需要的软件:
+### 构建需要的软件:
 ```
-golang
+golang 1.15
 git
 ```
 
 #### Fedora构建:
 ```
-确保xclip，xsel两个命令中的一个可以正常使用
-$ dnf install gtk3-devel gdk-pixbuf2-devel glib2-devel \
-    libxkbcommon-x11-devel
+$ dnf install gtk3-devel libxkbcommon-x11-devel xclip
+$ git clone https://github.com/xiefeihong/crazyreply.git
+$ cd crazyreply
+$ go build
+```
+
+#### Ubuntu构建:
+```
+$ apt-get install libgtk-3-dev libx11-xcb-dev libxkbcommon-x11-dev xclip
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ go build
@@ -57,7 +63,7 @@ $ go build
 
 #### Windows构建:
 ```
-推荐安装msys2
+推荐使用msys2
 $ pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-toolchain base-devel glib2-devel
 $ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc # This fixes a bug in pkgconfig
 $ git clone https://github.com/xiefeihong/crazyreply.git
@@ -65,6 +71,16 @@ $ cd crazyreply
 $ echo IDI_ICON1 ICON "view/ui/icon.ico" > crazyreply.rc
 $ windres -o crazyreply.syso crazyreply.rc
 $ go build -ldflags="-H windowsgui"
+```
+
+#### MacOS或其他操作系统构建:
+```
+自行配置golang(1.15)环境变量
+此项目依赖于：
+https://github.com/gotk3/gotk3
+https://github.com/go-vgo/robotgo
+请自行配置所依赖项目环境
+Linux, Unix要确保xclip，xsel两个命令中的一个可以正常使用
 ```
 
 #### Licences

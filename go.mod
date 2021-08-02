@@ -1,9 +1,9 @@
 module github.com/xiefeihong/crazyreply
 
-go 1.15
+go 1.16
 
 require (
-	github.com/go-vgo/robotgo v0.93.2
-	github.com/gotk3/gotk3 v0.5.2
-	github.com/robotn/gohook v0.30.5
+	github.com/go-vgo/robotgo v0.99.0
+	github.com/gotk3/gotk3 v0.6.1
+	github.com/robotn/gohook v0.30.6
 )

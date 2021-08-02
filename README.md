@@ -36,18 +36,17 @@ Windows 10系统下的效果
 ### 注意事项
 ```
 此项目在运行的时候可能会因为把焦点错误指定到某app的窗口，导致消息发送给了错误的人，所以在使用本工具之前应该谨慎，尽量关闭桌面多余的窗口。
-如果使用的linux版本的程序，要确保xclip，xsel两个命令中的一个可以正常使用。
 ```
 
 ### 构建需要的软件:
 ```
-golang 1.15
+golang
 git
 ```
 
 #### Fedora构建:
 ```
-$ dnf install gtk3-devel libxkbcommon-x11-devel xclip
+$ dnf install gtk3-devel libxkbcommon-x11-devel
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ go build
@@ -55,7 +54,7 @@ $ go build
 
 #### Ubuntu构建:
 ```
-$ apt-get install libgtk-3-dev libx11-xcb-dev libxkbcommon-x11-dev xclip
+$ apt-get install libgtk-3-dev libx11-xcb-dev libxkbcommon-x11-dev
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ go build
@@ -68,19 +67,18 @@ $ pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-toolchain base-devel glib2-de
 $ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc # This fixes a bug in pkgconfig
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
-$ echo IDI_ICON1 ICON "view/ui/icon.ico" > crazyreply.rc
+$ echo IDI_ICON1 ICON "view\ui\icon.ico" > crazyreply.rc
 $ windres -o crazyreply.syso crazyreply.rc
 $ go build -ldflags="-H windowsgui"
 ```
 
 #### MacOS或其他操作系统构建:
 ```
-自行配置golang(1.15)环境变量
+自行配置golang环境变量
 此项目依赖于：
 https://github.com/gotk3/gotk3
 https://github.com/go-vgo/robotgo
 请自行配置所依赖项目环境
-Linux, Unix要确保xclip，xsel两个命令中的一个可以正常使用
 ```
 
 #### Licences

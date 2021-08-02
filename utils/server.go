@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/go-vgo/robotgo"
-	"github.com/go-vgo/robotgo/clipboard"
 	"github.com/gotk3/gotk3/gtk"
 	hook "github.com/robotn/gohook"
 	"math/rand"
@@ -95,7 +94,8 @@ func reply(message string){
 		}
 		robotgo.MilliSleep(space)
 	}
-	clipboard.WriteAll(message)
+	clipboard, _ := gtk.ClipboardGet(0)
+	clipboard.SetText(message)
 	robotgo.MilliSleep(space)
 	robotgo.KeyTap("v", "ctrl")
 	robotgo.MilliSleep(space)

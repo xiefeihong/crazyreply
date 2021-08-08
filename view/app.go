@@ -18,46 +18,37 @@ func ShowApp() {
 		panic(err)
 	}
 	application.Connect("activate", func() {
-		var win = createAppWin()
-		application.AddWindow(win)
-		win.ShowAll()
+		onActivate(application)
 	})
 	os.Exit(application.Run(os.Args))
 }
 
-func createAppWin() *gtk.Window {
-	win, _ := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
+func onActivate(application *gtk.Application) {
+	win, _ := gtk.ApplicationWindowNew(application)
 	win.SetIconFromFile(utils.Root + "/view/ui/icon.ico")
 	win.SetSizeRequest(450, 450)
 	win.SetTitle("疯狂回复")
 	book, _ = gtk.NotebookNew()
 	for tagIndex, tag := range utils.Settings.Tags {
 		bookPage := createBookPage(tag.Msgs)
-		bottonAspectFrame := createBottonAspectFrame(tagIndex)
-		bookPage.Add(bottonAspectFrame)
+		bottonBox := createBottonBox(tagIndex)
+		bookPage.Add(bottonBox)
 		label, _ := gtk.LabelNew(tag.Label)
 		book.AppendPage(bookPage, label)
 	}
 	win.Add(book)
-	return win
+	win.ShowAll()
 }
 
 func createBookPage(msgs []string) *gtk.Box {
 	topBox, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
-	hdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
-	vdjustment, _ := gtk.AdjustmentNew(-1, -1, -1, -1, -1, -1)
-	scrolledWindow, _ := gtk.ScrolledWindowNew(hdjustment, vdjustment)
+	scrolledWindow, _ := gtk.ScrolledWindowNew(nil, nil)
 	scrolledWindow.SetVExpand(true)
-	viewport, _ := gtk.ViewportNew(hdjustment, vdjustment)
-	aspectFrame, _ := gtk.AspectFrameNew("", 0.5, 0, 1, true)
-	aspectFrame.SetShadowType(gtk.SHADOW_NONE)
+	viewport, _ := gtk.ViewportNew(nil, nil)
 	textsBox, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
-	scrolledWindow.Add(viewport)
-	scrolledWindow.SetMarginTop(10)
-	scrolledWindow.SetMarginStart(10)
-	scrolledWindow.SetMarginEnd(10)
-	viewport.Add(aspectFrame)
-	aspectFrame.Add(textsBox)
+	textsBox.SetMarginTop(10)
+	textsBox.SetMarginStart(10)
+	textsBox.SetMarginEnd(10)
 	ts := make([]*gtk.Entry, 0)
 	for i := 0; i < utils.Settings.EditNum; i++ {
 		inputLabel := strconv.FormatInt(int64(i + 1), 10) + ": "
@@ -67,11 +58,13 @@ func createBookPage(msgs []string) *gtk.Box {
 		} else {
 			msg = ""
 		}
-		textBox, textEnrty := createInputBox(inputLabel, msg)
+		textBox, inputEntry := createInputBox(inputLabel, msg)
 		textsBox.Add(textBox)
-		ts = append(ts, textEnrty)
+		ts = append(ts, inputEntry)
 	}
 	utils.Texts = append(utils.Texts, ts)
+	viewport.Add(textsBox)
+	scrolledWindow.Add(viewport)
 	topBox.Add(scrolledWindow)
 	return topBox
 }
@@ -80,20 +73,18 @@ func createInputBox(inputLabel string, messages string) (*gtk.Box, *gtk.Entry) {
 	lineBox, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 0)
 	label, _ := gtk.LabelNew(inputLabel)
 	label.SetWidthChars(3)
+	lineBox.Add(label)
 	inputEntry, _ := gtk.EntryNew()
 	inputEntry.SetHExpand(true)
-	inputEntry.SetWidthChars(50)
 	inputEntry.SetText(messages)
-	lineBox.Add(label)
 	lineBox.Add(inputEntry)
 	return lineBox, inputEntry
 }
 
-func createBottonAspectFrame(tagIndex int) *gtk.AspectFrame {
-	bottonAspectFrame, _ := gtk.AspectFrameNew("", 0.5, 0.5, 1, true)
-	bottonAspectFrame.SetShadowType(gtk.SHADOW_NONE)
-	bottonAspectFrame.SetMarginBottom(10)
+func createBottonBox(tagIndex int) *gtk.Box {
 	bottomBox, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 10)
+	bottomBox.SetHAlign(gtk.ALIGN_CENTER)
+	bottomBox.SetMarginBottom(10)
 	settingBtn, _ := gtk.ButtonNew()
 	settingBtn.SetLabel("设置")
 	startBtn, _ := gtk.ButtonNew()
@@ -137,8 +128,7 @@ func createBottonAspectFrame(tagIndex int) *gtk.AspectFrame {
 		}
 		startBtn.SetLabel(utils.BottonLabel)
 	})
-	bottonAspectFrame.Add(bottomBox)
 	bottomBox.Add(settingBtn)
 	bottomBox.Add(startBtn)
-	return bottonAspectFrame
+	return bottomBox
 }

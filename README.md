@@ -4,7 +4,7 @@
 ### 应用说明
 ```
 此项目是将预设好的消息通过粘贴到文本框并控制键盘的方式实现的循环发消息。
-此程序依赖robotgo，gotk3；目前确定支持Windows和Linux，MacOS理论上也支持。
+此程序依赖robotgo，gotk3；目前支持Windows和Linux，MacOS理论上也支持。
 ```
 
 #### 使用场景：
@@ -31,11 +31,13 @@ Windows 10系统下的效果
 ```
 输入预先填好的文字信息，点击开始，然后把焦点放到对应的文本框里就可以发消息了。
 文本框可以是任何可以输入文字的地方，比如弹幕的文本框，聊天软件文本框等。
+Linux,Unix下需要安装xclip或xsel
 ```
 
 ### 注意事项
 ```
 此项目在运行的时候可能会因为把焦点错误指定到某app的窗口，导致消息发送给了错误的人，所以在使用本工具之前应该谨慎，尽量关闭桌面多余的窗口。
+Linux,Unix下需要安装xclip或xsel
 ```
 
 ### 构建需要的软件:
@@ -46,7 +48,7 @@ git
 
 #### Fedora构建:
 ```
-$ dnf install gtk3-devel libxkbcommon-x11-devel
+$ dnf install gtk3-devel libxkbcommon-x11-devel xclip
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ go build
@@ -54,7 +56,7 @@ $ go build
 
 #### Ubuntu构建:
 ```
-$ apt-get install libgtk-3-dev libx11-xcb-dev libxkbcommon-x11-dev
+$ apt-get install libgtk-3-dev libx11-xcb-dev libxkbcommon-x11-dev xclip
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ go build
@@ -64,7 +66,7 @@ $ go build
 ```
 推荐使用msys2
 $ pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-toolchain base-devel glib2-devel
-$ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc # This fixes a bug in pkgconfig
+$ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
 $ echo IDI_ICON1 ICON "view\ui\icon.ico" > crazyreply.rc
@@ -78,6 +80,7 @@ $ go build -ldflags="-H windowsgui"
 此项目依赖于：
 https://github.com/gotk3/gotk3
 https://github.com/go-vgo/robotgo
+Linux,Unix下需要安装xclip或xsel
 请自行配置所依赖项目环境
 ```
 

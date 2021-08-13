@@ -31,9 +31,11 @@ type Setting struct {
 var (
 	Root string
 	Texts = make([][]*gtk.Entry, 0)
-	PageIndex int
+	Book *gtk.Notebook
 	BottonLabel string
 	Settings Setting
+	ReplyIndex int
+	MsgIndex int
 	KeyCode = map[uint16]string{41:"`",2:"1",3:"2",4:"3",5:"4",6:"5",7:"6",8:"7",9:"8",10:"9",11:"0",12:"-",13:"+",
 		16:"q",17:"w",18:"e",19:"r",20:"t",21:"y",22:"u",23:"i",24:"o",25:"p",26:"[",27:"]",43:"\\",30:"a",31:"s",32:"d",33:"f",34:"g",35:"h",36:"j",37:"k",38:"l",39:";",40:"'",44:"z",45:"x",46:"c",47:"v",48:"b",49:"n",50:"m",
 		51:",",52:".",53:"/",59:"f1",60:"f2",61:"f3",62:"f4",63:"f5",64:"f6",65:"f7",66:"f8",67:"f9",68:"f10",69:"f11",70:"f12",
@@ -41,35 +43,45 @@ var (
 )
 
 func CarryReply(button *gtk.Button) {
-	msgs := Settings.Tags[PageIndex].Msgs
-	msgLen := len(msgs)
-	setText(Texts, false)
-	for ;BottonLabel == "结束"; {
-		if Settings.Random {
-			for i:= 0; BottonLabel == "结束" &&  i < Settings.ReplyNum * msgLen; i++ {
-				reply(msgs[rand.Intn(msgLen)])
-			}
-		} else {
-			for i:= 0 ; BottonLabel == "结束" && i < Settings.ReplyNum; i++ {
-				for j:=0; j< msgLen; j++ {
-					reply(msgs[j])
-				}
-			}
+	setTextState(Texts, false)
+	msgs := Settings.Tags[Book.GetCurrentPage()].Msgs
+	if Settings.WithoutStop {
+		for ;BottonLabel == "结束"; {
+			replys(msgs)
 		}
-		if !Settings.WithoutStop {
-			break
-		}
+	} else {
+		replys(msgs)
 	}
 	robotgo.EventEnd()
-	setText(Texts, true)
+	setTextState(Texts, true)
 	BottonLabel = "开始"
 	button.SetLabel(BottonLabel)
 }
 
-func setText(texts [][]*gtk.Entry, disable bool) {
+func setTextState(texts [][]*gtk.Entry, disable bool) {
 	for _, msgs := range texts {
 		for _, entry := range msgs {
 			entry.SetEditable(disable)
+		}
+	}
+}
+
+func replys(msgs []string)  {
+	if Settings.Random {
+		for ReplyIndex= 0; BottonLabel == "结束" &&  ReplyIndex < Settings.ReplyNum * len(msgs); ReplyIndex++ {
+			msgs = Settings.Tags[Book.GetCurrentPage()].Msgs
+			if len(msgs) > 0 {
+				reply(msgs[rand.Intn(len(msgs))])
+			}
+		}
+	} else {
+		for ReplyIndex= 0 ; BottonLabel == "结束" && ReplyIndex < Settings.ReplyNum; ReplyIndex++ {
+			for MsgIndex=0; MsgIndex< len(msgs); MsgIndex++ {
+				msgs = Settings.Tags[Book.GetCurrentPage()].Msgs
+				if len(msgs) > 0 {
+					reply(msgs[MsgIndex])
+				}
+			}
 		}
 	}
 }

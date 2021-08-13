@@ -69,7 +69,7 @@ $ pacman -S mingw-w64-x86_64-gtk3 mingw-w64-x86_64-toolchain base-devel glib2-de
 $ sed -i -e 's/-Wl,-luuid/-luuid/g' /mingw64/lib/pkgconfig/gdk-3.0.pc
 $ git clone https://github.com/xiefeihong/crazyreply.git
 $ cd crazyreply
-$ echo IDI_ICON1 ICON "view\ui\icon.ico" > crazyreply.rc
+$ echo 'IDI_ICON1 ICON "view\ui\icon.ico"' > crazyreply.rc
 $ windres -o crazyreply.syso crazyreply.rc
 $ go build -ldflags="-H windowsgui"
 ```

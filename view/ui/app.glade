@@ -7,356 +7,376 @@
     <property name="title" translatable="yes">疯狂回复</property>
     <property name="icon">icon.ico</property>
     <child>
-      <object class="GtkNotebook" id="notebook">
+      <object class="GtkBox">
         <property name="visible">1</property>
-        <property name="can-focus">1</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">10</property>
         <child>
           <object class="GtkBox">
             <property name="visible">1</property>
-            <property name="orientation">vertical</property>
             <property name="spacing">10</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkNotebook" id="notebook">
                 <property name="visible">1</property>
                 <property name="can-focus">1</property>
                 <child>
-                  <object class="GtkViewport">
+                  <object class="GtkBox">
                     <property name="visible">1</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">10</property>
                     <child>
-                      <object class="GtkBox" id="inputs1">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">1</property>
-                        <property name="margin-start">10</property>
-                        <property name="margin-end">10</property>
-                        <property name="margin-top">10</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">10</property>
+                        <property name="can-focus">1</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkViewport">
                             <property name="visible">1</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkBox" id="inputs1">
                                 <property name="visible">1</property>
-                                <property name="label" translatable="yes">1: </property>
-                                <property name="width-chars">3</property>
+                                <property name="margin-start">10</property>
+                                <property name="margin-end">10</property>
+                                <property name="margin-top">10</property>
+                                <property name="margin-bottom">10</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">10</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">1: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">2: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">3: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">4: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">5: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">6: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">5</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">7: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">8: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">7</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">9: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">8</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">1</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">1</property>
+                                        <property name="label" translatable="yes">10: </property>
+                                        <property name="width-chars">3</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">1</property>
+                                        <property name="can-focus">1</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">1</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">9</property>
+                                  </packing>
+                                </child>
                               </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">2: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">3: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">4: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">5: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">6: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">7: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">8: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">7</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">9: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">8</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">1</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">1</property>
-                                <property name="label" translatable="yes">10: </property>
-                                <property name="width-chars">3</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry">
-                                <property name="visible">1</property>
-                                <property name="can-focus">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">1</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">9</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">1</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
-              </object>
-              <packing>
-                <property name="expand">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">1</property>
-                <property name="halign">center</property>
-                <property name="margin-bottom">10</property>
-                <property name="spacing">10</property>
-                <child>
-                  <object class="GtkButton" id="button1">
-                    <property name="label" translatable="yes">设置</property>
+                <child type="tab">
+                  <object class="GtkLabel">
                     <property name="visible">1</property>
+                    <property name="label" translatable="yes">page 1</property>
                   </object>
+                  <packing>
+                    <property name="tab-fill">0</property>
+                  </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button2">
-                    <property name="label" translatable="yes">开始</property>
+                  <object class="GtkBox">
                     <property name="visible">1</property>
                   </object>
                   <packing>
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <child type="tab">
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="label" translatable="yes">page 2</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="tab-fill">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">1</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel">
+                    <property name="visible">1</property>
+                    <property name="label" translatable="yes">page 3</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                    <property name="tab-fill">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">1</property>
+            <property name="halign">center</property>
+            <property name="margin-bottom">10</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkButton" id="button1">
+                <property name="label" translatable="yes">设置</property>
+                <property name="visible">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button2">
+                <property name="label" translatable="yes">开始</property>
+                <property name="visible">1</property>
               </object>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">1</property>
-            <property name="label" translatable="yes">page 1</property>
-          </object>
-          <packing>
-            <property name="tab-fill">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">1</property>
-          </object>
           <packing>
             <property name="position">1</property>
-          </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">1</property>
-            <property name="label" translatable="yes">page 2</property>
-          </object>
-          <packing>
-            <property name="position">1</property>
-            <property name="tab-fill">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">1</property>
-          </object>
-          <packing>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">1</property>
-            <property name="label" translatable="yes">page 3</property>
-          </object>
-          <packing>
-            <property name="position">2</property>
-            <property name="tab-fill">0</property>
           </packing>
         </child>
       </object>

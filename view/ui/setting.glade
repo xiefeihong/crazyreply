@@ -185,9 +185,11 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">1</property>
+                    <property name="homogeneous">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">1</property>
+                        <property name="halign">center</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
@@ -210,13 +212,11 @@
                           </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">1</property>
+                        <property name="halign">center</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
@@ -240,7 +240,6 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
                         <property name="position">1</property>
                       </packing>
                     </child>

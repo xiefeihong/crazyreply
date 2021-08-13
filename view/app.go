@@ -9,8 +9,6 @@ import (
 	"strconv"
 )
 
-var book *gtk.Notebook
-
 func ShowApp() {
 	const appID = "top.xiefeihong.crazyreply"
 	application, err := gtk.ApplicationNew(appID, glib.APPLICATION_FLAGS_NONE)
@@ -28,15 +26,21 @@ func onActivate(application *gtk.Application) {
 	win.SetIconFromFile(utils.Root + "/view/ui/icon.ico")
 	win.SetSizeRequest(450, 450)
 	win.SetTitle("疯狂回复")
-	book, _ = gtk.NotebookNew()
-	for tagIndex, tag := range utils.Settings.Tags {
+	box, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
+	utils.Book, _ = gtk.NotebookNew()
+	for _, tag := range utils.Settings.Tags {
 		bookPage := createBookPage(tag.Msgs)
-		bottonBox := createBottonBox(tagIndex)
-		bookPage.Add(bottonBox)
 		label, _ := gtk.LabelNew(tag.Label)
-		book.AppendPage(bookPage, label)
+		utils.Book.AppendPage(bookPage, label)
+		utils.Book.Connect("switch-page", func() {
+			utils.ReplyIndex = 0
+			utils.MsgIndex = 0
+		})
 	}
-	win.Add(book)
+	box.Add(utils.Book)
+	bottonBox := createBottonBox()
+	box.Add(bottonBox)
+	win.Add(box)
 	win.ShowAll()
 }
 
@@ -49,6 +53,7 @@ func createBookPage(msgs []string) *gtk.Box {
 	textsBox.SetMarginTop(10)
 	textsBox.SetMarginStart(10)
 	textsBox.SetMarginEnd(10)
+	textsBox.SetMarginBottom(10)
 	ts := make([]*gtk.Entry, 0)
 	for i := 0; i < utils.Settings.EditNum; i++ {
 		inputLabel := strconv.FormatInt(int64(i + 1), 10) + ": "
@@ -81,7 +86,7 @@ func createInputBox(inputLabel string, messages string) (*gtk.Box, *gtk.Entry) {
 	return lineBox, inputEntry
 }
 
-func createBottonBox(tagIndex int) *gtk.Box {
+func createBottonBox() *gtk.Box {
 	bottomBox, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 10)
 	bottomBox.SetHAlign(gtk.ALIGN_CENTER)
 	bottomBox.SetMarginBottom(10)
@@ -96,13 +101,13 @@ func createBottonBox(tagIndex int) *gtk.Box {
 		}
 	})
 	startBtn.Connect("clicked", func() {
-		utils.PageIndex = tagIndex
+		pageIndex := utils.Book.GetCurrentPage()
 		utils.BottonLabel, _ = startBtn.GetLabel()
 		if utils.BottonLabel == "开始" {
-			msgs := utils.Settings.Tags[tagIndex].Msgs
+			msgs := utils.Settings.Tags[pageIndex].Msgs
 			var validNum = 0
 			for i := 0; i < utils.Settings.EditNum; i++ {
-				str, _ := utils.Texts[tagIndex][i].GetText()
+				str, _ := utils.Texts[pageIndex][i].GetText()
 				if str != "" {
 					if i < len(msgs) {
 						msgs[i] = str
@@ -115,7 +120,7 @@ func createBottonBox(tagIndex int) *gtk.Box {
 			if validNum < len(msgs) {
 				msgs = msgs[:validNum]
 			}
-			utils.Settings.Tags[tagIndex].Msgs = msgs
+			utils.Settings.Tags[pageIndex].Msgs = msgs
 			utils.SettingToFile()
 			if len(msgs) != 0 {
 				utils.BottonLabel = "结束"
@@ -125,6 +130,7 @@ func createBottonBox(tagIndex int) *gtk.Box {
 			}
 		} else if utils.BottonLabel == "结束" {
 			utils.BottonLabel = "开始"
+			robotgo.KeyTap("tab")
 		}
 		startBtn.SetLabel(utils.BottonLabel)
 	})

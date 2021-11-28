@@ -8,6 +8,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	hook "github.com/robotn/gohook"
 	"math/rand"
+	"runtime"
 )
 
 type Tag struct {
@@ -15,10 +16,17 @@ type Tag struct {
 	Msgs []string `json:"msgs"`
 }
 
+type Strategy string
+const(
+	Key Strategy = "key"
+	Clipboard Strategy = "clipboard"
+)
+
 type Setting struct {
 	DateLimit int `json:"date_limit"`
 	ReplyNum int `json:"reply_num"`
 	EditNum int `json:"edit_num"`
+	Strategy Strategy `json:"strategy"`
 	Tags []Tag `json:"tags"`
 	BeforeKeys []string `json:"before_keys"`
 	EndKeys []string `json:"end_keys"`
@@ -26,6 +34,7 @@ type Setting struct {
 	WithoutStop bool `json:"without_stop"`
 	Average bool `json:"average"`
 	Before bool `json:"before"`
+	OS string `json:"os"`
 }
 
 var (
@@ -107,9 +116,13 @@ func reply(message string){
 		}
 		robotgo.MilliSleep(space)
 	}
-	clipboard.WriteAll(message)
-	robotgo.MilliSleep(space)
-	robotgo.KeyTap("v", "ctrl")
+	if Settings.Strategy == Key {
+		robotgo.TypeStr(message)
+	} else if Settings.Strategy == Clipboard {
+		clipboard.WriteAll(message)
+		robotgo.MilliSleep(space)
+		robotgo.KeyTap("v", "ctrl")
+	}
 	robotgo.MilliSleep(space)
 	robotgo.KeyTap("enter")
 	robotgo.MilliSleep(date)
@@ -127,7 +140,7 @@ func StartSettings() {
 	defer func(){
 		if err := recover(); err != nil {
 			tags := []Tag{{"LOL", make([]string, 0)}, {"弹幕", make([]string, 0)}, {"网友", make([]string, 0)}}
-			Settings = Setting{50, 10, 10, tags, nil, []string{"control", "t"}, true, false, false, false}
+			Settings = Setting{50, 10, 10, Clipboard, tags, nil, []string{"control", "t"}, true, false, false, false, runtime.GOOS}
 		}
 	}()
 	out := ReadBytesToFile(Root + "/config.json")

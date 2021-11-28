@@ -133,21 +133,26 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="before_keys_box">
+                      <object class="GtkBox">
                         <property name="visible">1</property>
                         <property name="spacing">4</property>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">1</property>
-                            <property name="label">前置按键: </property>
+                            <property name="label">发送方式: </property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkEntry" id="before_keys">
+                          <object class="GtkComboBoxText">
                             <property name="visible">1</property>
-                            <property name="can-focus">1</property>
+                            <property name="active">0</property>
+                            <items>
+                              <item translatable="yes">键盘</item>
+                              <item translatable="yes">粘贴板</item>
+                            </items>
                           </object>
                           <packing>
+                            <property name="expand">1</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -178,6 +183,30 @@
                       </object>
                       <packing>
                         <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="before_keys_box">
+                        <property name="visible">1</property>
+                        <property name="spacing">4</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">1</property>
+                            <property name="label">前置按键: </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="before_keys">
+                            <property name="visible">1</property>
+                            <property name="can-focus">1</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>

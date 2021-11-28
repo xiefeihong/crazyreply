@@ -5,6 +5,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	hook "github.com/robotn/gohook"
 	"github.com/xiefeihong/crazyreply/utils"
+	"runtime"
 	"strconv"
 	"strings"
 )
@@ -57,6 +58,16 @@ func ShowSetting() {
 	editNumBox.Add(editNumLabel)
 	editNumBox.Add(editNumSpinBtn)
 	topLeft1Box.Add(editNumBox)
+
+	strategyBox, _ := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 4)
+	strategyLabel, _ := gtk.LabelNew("发送方式: ")
+	strategyComboBoxText, _ := gtk.ComboBoxTextNew()
+	strategyComboBoxText.Append(string(utils.Key), "键盘")
+	strategyComboBoxText.Append(string(utils.Clipboard), "粘贴板")
+	strategyComboBoxText.SetHExpand(true)
+	strategyBox.Add(strategyLabel)
+	strategyBox.Add(strategyComboBoxText)
+	topLeft1Box.Add(strategyBox)
 
 	beforeKeysBox, _ = gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 4)
 	beforeKeysLabel, _ := gtk.LabelNew("前置按键: ")
@@ -140,7 +151,7 @@ func ShowSetting() {
 		win.Close()
 	})
 	preserveBtn.Connect("clicked", func() {
-		restart := changeData(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, beforeKeysEntry, endKeysEntry, randomCheckButton, averageCheckButton, beforeCheckButton, labelEntrys)
+		restart := changeData(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, strategyComboBoxText, beforeKeysEntry, endKeysEntry, randomCheckButton, averageCheckButton, beforeCheckButton, labelEntrys)
 		if restart {
 			dialog := gtk.MessageDialogNew(win, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, "%s", "请重新打开此程序")
 			dialog.Run()
@@ -173,7 +184,7 @@ func ShowSetting() {
 	endKeysEntry.Connect("focus_out_event", func() {
 		robotgo.EventEnd()
 	})
-	changeUI(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, beforeKeysEntry, endKeysEntry, randomCheckButton, averageCheckButton, beforeCheckButton, textLabsBox)
+	changeUI(dateLimitSpinBtn, replyNumSpinBtn, editNumSpinBtn, strategyComboBoxText, beforeKeysEntry, endKeysEntry, randomCheckButton, averageCheckButton, beforeCheckButton, textLabsBox)
 	win.ShowAll()
 	setReplyNumBox()
 	setBeforeBox()
@@ -204,7 +215,7 @@ func keyUpEvent(keysEntry *gtk.Entry) {
 	}
 }
 
-func changeData(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, beforeKeysEntry *gtk.Entry, endKeysEntry *gtk.Entry, randomCheckButton *gtk.CheckButton, averageCheckButton *gtk.CheckButton, beforeCheckButton *gtk.CheckButton, textLabEntrys []*gtk.Entry) bool {
+func changeData(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, strategyComboBoxText *gtk.ComboBoxText, beforeKeysEntry *gtk.Entry, endKeysEntry *gtk.Entry, randomCheckButton *gtk.CheckButton, averageCheckButton *gtk.CheckButton, beforeCheckButton *gtk.CheckButton, textLabEntrys []*gtk.Entry) bool {
 	dateLimitStr, _ := dateLimitSpinBtn.GetText()
 	replyNumStr, _ := replyNumSpinBtn.GetText()
 	editNumStr, _ := editNumSpinBtn.GetText()
@@ -213,6 +224,7 @@ func changeData(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButto
 	dateLimit, _ := strconv.Atoi(dateLimitStr)
 	replyNum, _ := strconv.Atoi(replyNumStr)
 	editNum, _ := strconv.Atoi(editNumStr)
+	strategy := strategyComboBoxText.GetActiveID()
 	beforeKeys := strings.Fields(beforeKeyStr)
 	endKeys := strings.Fields(endKeyStr)
 	random := randomCheckButton.GetActive()
@@ -243,15 +255,16 @@ func changeData(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButto
 			tags = append(tags, utils.Tag{text, msgs})
 		}
 	}
-	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, tags, beforeKeys, endKeys, random, withoutStop, average, before}
+	utils.Settings = utils.Setting{dateLimit, replyNum, editNum, utils.Strategy(strategy), tags, beforeKeys, endKeys, random, withoutStop, average, before, runtime.GOOS}
 	utils.SettingToFile()
 	return restart
 }
 
-func changeUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, beforeKeysEntry *gtk.Entry, endKeysEntry *gtk.Entry, randomCheckButton *gtk.CheckButton, averageCheckButton *gtk.CheckButton, beforeCheckButton *gtk.CheckButton, textLabsBox *gtk.Box) {
+func changeUI(dateLimitSpinBtn *gtk.SpinButton, replyNumSpinBtn *gtk.SpinButton, editNumSpinBtn *gtk.SpinButton, strategyComboBoxText *gtk.ComboBoxText, beforeKeysEntry *gtk.Entry, endKeysEntry *gtk.Entry, randomCheckButton *gtk.CheckButton, averageCheckButton *gtk.CheckButton, beforeCheckButton *gtk.CheckButton, textLabsBox *gtk.Box) {
 	dateLimitSpinBtn.SetValue(float64(utils.Settings.DateLimit))
 	replyNumSpinBtn.SetValue(float64(utils.Settings.ReplyNum))
 	editNumSpinBtn.SetValue(float64(utils.Settings.EditNum))
+	strategyComboBoxText.SetActiveID(string(utils.Settings.Strategy))
 	labelEntrys = make([]*gtk.Entry, 0)
 	for _, tag := range utils.Settings.Tags {
 		textLabEntry, _ := gtk.EntryNew()
